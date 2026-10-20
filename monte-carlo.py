@@ -96,7 +96,7 @@ num_sims = st.sidebar.slider(
     step=5000,
 )
 
-# Strict Confidence Threshold set to 90% as requested
+# Strict Confidence Threshold set to 90%
 confidence_threshold = 90.0
 st.sidebar.info(
     f"🔒 Strict Decision Threshold: **{confidence_threshold}%** (Will advise to bet ONLY if confidence reaches 90%+)"
@@ -207,7 +207,7 @@ with btn_col2:
 
 # --- Section 2: Display History Table & Roadmap ---
 st.markdown("---")
-st.subheader("2️⃣ Current Shoe History & Statistics")
+st.subheader("2️⃣ Current Shoe History Table & Statistics")
 
 if st.session_state.rounds:
     badges_html = ""
@@ -235,7 +235,7 @@ if st.session_state.rounds:
         f"Total Rounds: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}** | Cards Used: **{len(st.session_state.used_cards)}**"
     )
 
-    # Detailed Table View as requested
+    # Detailed Table View
     df_hist = pd.DataFrame([
         {
             "Round": r["round"],
@@ -253,9 +253,7 @@ if st.session_state.rounds:
     ])
     st.dataframe(df_hist, use_container_width=True, hide_index=True)
 else:
-    st.info(
-        "No rounds recorded yet in this shoe. Please record cards or view baseline simulation below."
-    )
+    st.info("No rounds recorded yet in this shoe. Please record round history.")
 
 
 # --- Monte Carlo Simulation Function ---
@@ -344,7 +342,7 @@ if best_prob >= confidence_threshold:
     )
 else:
     st.markdown(
-        f'<div class="big-badge wait-signal">⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {best_prob:.2f}% (Below the strict 90% requirement). Skip this round!</div>',
+        f'<div class="big-badge wait-signal">⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {best_prob:.2f}% (Below strict 90% requirement). Skip this round!</div>',
         unsafe_allow_html=True,
     )
 
