@@ -41,12 +41,109 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title(
-    "🃏 Card Shoe Monte Carlo Predictor & 50-Round Editable Grid Analytics"
+# --- Sidebar Settings & Multi-language Selector ---
+st.sidebar.header("🌐 Language / ภาษา")
+lang = st.sidebar.selectbox(
+    "Select Language / เลือกภาษา", ["English", "ไทย"], index=0
 )
-st.markdown(
-    "Predicting outcomes using a **50-Round Editable Grid Table**, **Last 30-Round Analytics**, and **Remaining Cards Simulation**."
-)
+
+# Dictionary for Multi-language Support
+translations = {
+    "English": {
+        "title": (
+            "🃏 Card Shoe Monte Carlo Predictor & 50-Round Grid Analytics"
+        ),
+        "subtitle": (
+            "Predicting outcomes using a **50-Round Editable Grid Table**, **Last"
+            " 30-Round Analytics**, and **Remaining Cards Simulation**."
+        ),
+        "grid_title": "1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)",
+        "grid_desc": (
+            "💡 **50-Round Grid Table:** Click or check the boxes (Red, Blue,"
+            " Tie) to record historical data directly like Excel for analysis."
+        ),
+        "roadmap_title": "2️⃣ Roadmap & Last 30-Round Trend Analytics",
+        "pred_title": (
+            "3️⃣ Monte Carlo Next Round Prediction & Strict Betting Decision"
+        ),
+        "red_prob": "🔴 Red Win Probability",
+        "blue_prob": "🔵 Blue Win Probability",
+        "tie_prob": "🟢 Tie Probability",
+        "rec_title": "🎯 Betting Recommendation (Strict 90% Rule):",
+        "bet_on": "✅ Recommendation: Bet on 【",
+        "confirmed": "】 — Absolutely Confirmed! (Confidence: ",
+        "wait": (
+            "⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {prob:.2f}%"
+            " (Below strict 90% requirement). Skip this round!"
+        ),
+        "reset": "🗑️ Reset Grid Data & Clear History",
+        "mode": "Game Scoring Mode:",
+        "mode_bacc": (
+            "Baccarat / Dragon Tiger Style (10, J, Q, K = 0 for Baccarat)"
+        ),
+        "mode_single": "Single Card High Value (A=1 to K=13)",
+        "sims": "Monte Carlo Iterations (per deck)",
+        "threshold_info": (
+            "🔒 Strict Decision Threshold: **90%**\n\n(Will advise to bet"
+            " **ONLY** if confidence reaches 90%+)"
+        ),
+        "total_valid": "Total Valid Rounds Recorded:",
+        "red_wins": "Red Wins",
+        "blue_wins": "Blue Wins",
+        "ties": "Ties",
+        "no_data": (
+            "Please enter round outcomes in the 50-round grid table above to"
+            " start analytics."
+        ),
+    },
+    "ไทย": {
+        "title": (
+            "🃏 ระบบจำลอง Monte Carlo ไพ่ในขอน & ตารางกริดวิเคราะห์ 50 รอบ"
+        ),
+        "subtitle": (
+            "พยากรณ์ผลลัพธ์ด้วย **ตารางกริดแก้ไขได้ 50 รอบ**, **การวิเคราะห์ 30"
+            " ตาล่าสุด**, และ **การจำลองไพ่ที่เหลือในขอน**"
+        ),
+        "grid_title": "1️⃣ ตารางกริดบันทึกข้อมูลย้อนหลัง (50 รอบ)",
+        "grid_desc": (
+            "💡 **ตารางกริด 50 รอบ:** คลิกติ๊กเลือกผลย้อนหลัง (Red, Blue, Tie)"
+            " หรือพิมพ์บันทึกข้อมูลได้โดยตรงเหมือน Excel"
+        ),
+        "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์เทรนด์ 30 ตาล่าสุด",
+        "pred_title": "3️⃣ พยากรณ์ตาถัดไป & เกณฑ์คุมเข้มการเดิมพัน 90%",
+        "red_prob": "🔴 โอกาสฝ่ายแดงชนะ",
+        "blue_prob": "🔵 โอกาสฝ่ายน้ำเงินชนะ",
+        "tie_prob": "🟢 โอกาสเสมอ",
+        "rec_title": "🎯 คำแนะนำการเดิมพัน (กฎความมั่นใจ 90%):",
+        "bet_on": "✅ คำแนะนำ: ควรลงเดิมพันฝั่ง 【",
+        "confirmed": "】 — ยืนยันความมั่นใจเต็มร้อย! (ความน่าจะเป็น: ",
+        "wait": (
+            "⛔ คำแนะนำ: 【ห้ามลงเดิมพัน / รอจังหวะ (DO NOT BET / WAIT)】"
+            " — ความน่าจะเป็น {prob:.2f}% (ยังไม่ถึงเกณฑ์ 90%) ข้ามตานี้ไปก่อน!"
+        ),
+        "reset": "🗑️ ล้างข้อมูลกริด & เริ่มขอนใหม่",
+        "mode": "รูปแบบการคิดแต้ม:",
+        "mode_bacc": "สไตล์บาคาร่า / เสือมังกร (10, J, Q, K นับเป็น 0)",
+        "mode_single": "วัดแต้มหน้าไพ่เดี่ยว (A=1 ถึง K=13)",
+        "sims": "จำนวนรอบจำลอง Monte Carlo (ต่อสำรับ)",
+        "threshold_info": (
+            "🔒 เกณฑ์การตัดสินใจ: **90%**\n\n(จะแนะนำให้ลงแทงก็ต่อเมื่อความมั่นใจ"
+            " ถึง 90% ขึ้นไปเท่านั้น)"
+        ),
+        "total_valid": "จำนวนตาทั้งหมดที่บันทึก:",
+        "red_wins": "แดงชนะ",
+        "blue_wins": "น้ำเงินชนะ",
+        "ties": "เสมอ",
+        "no_data": (
+            "กรุณากรอกผลการแข่งขันในตารางกริด 50 รอบด้านบน เพื่อเริ่มระบบวิเคราะห์"
+        ),
+    },
+}
+
+t = translations[lang]
+
+st.title(t["title"])
+st.markdown(t["subtitle"])
 
 # Initialize Session State for Grid Table History (Total 50 Rounds)
 if "grid_history" not in st.session_state:
@@ -65,31 +162,19 @@ if "grid_history" not in st.session_state:
 st.sidebar.header("⚙️ Simulation Parameters")
 
 game_mode = st.sidebar.radio(
-    "Game Scoring Mode:",
-    [
-        "Baccarat / Dragon Tiger Style (10, J, Q, K = 0 for Baccarat)",
-        "Single Card High Value (A=1 to K=13)",
-    ],
+    t["mode"], [t["mode_bacc"], t["mode_single"]]
 )
 
 num_sims = st.sidebar.slider(
-    "Monte Carlo Iterations (per deck)",
-    min_value=10000,
-    max_value=50000,
-    value=20000,
-    step=5000,
+    t["sims"], min_value=10000, max_value=50000, value=20000, step=5000
 )
 
 # Strict Confidence Threshold set to 90%
 confidence_threshold = 90.0
-st.sidebar.info(
-    f"🔒 Strict Decision Threshold: **{confidence_threshold}%**\n\n(Will advise to bet **ONLY** if confidence reaches 90%+)"
-)
+st.sidebar.info(t["threshold_info"])
 
 st.sidebar.markdown("---")
-if st.sidebar.button(
-    "🗑️ Reset Grid Data & Clear History", use_container_width=True
-):
+if st.sidebar.button(t["reset"], use_container_width=True):
     reset_data = []
     for i in range(1, 51):
         reset_data.append({
@@ -103,10 +188,8 @@ if st.sidebar.button(
     st.rerun()
 
 # --- Section 1: Editable Grid Table for Historical Data Analysis (50 Rounds) ---
-st.subheader("1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)")
-st.markdown(
-    "💡 **ตารางกริด 50 รอบ:** คุณสามารถคลิกติ๊กเลือกผลย้อนหลัง (Red, Blue, Tie) หรือพิมพ์บันทึกข้อมูลย้อนหลังได้โดยตรงเหมือนใช้งาน Excel เพื่อใช้ Analyze ร่วมกับการจำลอง"
-)
+st.subheader(t["grid_title"])
+st.markdown(t["grid_desc"])
 
 edited_grid_df = st.data_editor(
     st.session_state.grid_history,
@@ -140,7 +223,7 @@ for idx, row in edited_grid_df.iterrows():
 
 # --- Section 2: Display Roadmap & Last 30-Round Analytics ---
 st.markdown("---")
-st.subheader("2️⃣ Roadmap & Last 30-Round Trend Analytics")
+st.subheader(t["roadmap_title"])
 
 if processed_rounds:
     badges_html = ""
@@ -170,15 +253,16 @@ if processed_rounds:
 
     col_p1, col_p2, col_p3 = st.columns(3)
     col_p1.metric(
-        "Last 30 Rounds - Red Wins",
+        f"Last 30 - {t['red_wins']}",
         f"{r_count_30} ({r_count_30/total_30*100:.1f}%)",
     )
     col_p2.metric(
-        "Last 30 Rounds - Blue Wins",
+        f"Last 30 - {t['blue_wins']}",
         f"{b_count_30} ({b_count_30/total_30*100:.1f}%)",
     )
     col_p3.metric(
-        "Last 30 Rounds - Ties", f"{t_count_30} ({t_count_30/total_30*100:.1f}%)"
+        f"Last 30 - {t['ties']}",
+        f"{t_count_30} ({t_count_30/total_30*100:.1f}%)",
     )
 
     total_r = len(processed_rounds)
@@ -187,12 +271,11 @@ if processed_rounds:
     tie_wins = sum(1 for r in processed_rounds if r["winner"] == "Tie")
 
     st.caption(
-        f"Total Valid Rounds Recorded: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}**"
+        f"{t['total_valid']} **{total_r}** | {t['red_wins']}: **{red_wins}** |"
+        f" {t['blue_wins']}: **{blue_wins}** | {t['ties']}: **{tie_wins}**"
     )
 else:
-    st.info(
-        "กรุณากรอกผลการแข่งขันในตารางกริด 50 รอบด้านบน เพื่อเริ่มระบบวิเคราะห์"
-    )
+    st.info(t["no_data"])
 
 
 # --- Monte Carlo Simulation Combined with Last 30-Round History ---
@@ -274,16 +357,16 @@ def run_monte_carlo_grid(used_cards, rounds_history, game_mode, num_simulations)
 
 # --- Section 3: Prediction & Strict 90% Confidence Decision ---
 st.markdown("---")
-st.subheader("3️⃣ Monte Carlo Next Round Prediction & Strict Betting Decision")
+st.subheader(t["pred_title"])
 
 final_probs, deck_breakdown = run_monte_carlo_grid(
     [], processed_rounds, game_mode, num_sims
 )
 
 m1, m2, m3 = st.columns(3)
-m1.metric("🔴 Red Win Probability", f"{final_probs['Red']:.2f}%")
-m2.metric("🔵 Blue Win Probability", f"{final_probs['Blue']:.2f}%")
-m3.metric("🟢 Tie Probability", f"{final_probs['Tie']:.2f}%")
+m1.metric(t["red_prob"], f"{final_probs['Red']:.2f}%")
+m2.metric(t["blue_prob"], f"{final_probs['Blue']:.2f}%")
+m3.metric(t["tie_prob"], f"{final_probs['Tie']:.2f}%")
 
 best_side = max(final_probs, key=final_probs.get)
 best_side_name = (
@@ -293,7 +376,7 @@ best_side_name = (
 )
 best_prob = final_probs[best_side]
 
-st.markdown("### 🎯 Betting Recommendation (Strict 90% Rule):")
+st.markdown(f"### {t['rec_title']}")
 
 if best_prob >= confidence_threshold:
     if best_side == "Tie":
@@ -304,11 +387,12 @@ if best_prob >= confidence_threshold:
         badge_cls = "blue-win"
 
     st.markdown(
-        f'<div class="big-badge {badge_cls}">✅ Recommendation: Bet on 【{best_side_name}】 — Absolutely Confirmed! (Confidence: {best_prob:.2f}% >= 90%)</div>',
+        f'<div class="big-badge {badge_cls}">{t["bet_on"]}{best_side_name}{t["confirmed"]}{best_prob:.2f}% >= 90%)</div>',
         unsafe_allow_html=True,
     )
 else:
+    wait_text = t["wait"].format(prob=best_prob)
     st.markdown(
-        f'<div class="big-badge wait-signal">⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {best_prob:.2f}% (Below strict 90% requirement). Skip this round!</div>',
+        f'<div class="big-badge wait-signal">{wait_text}</div>',
         unsafe_allow_html=True,
     )
