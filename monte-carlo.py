@@ -41,9 +41,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("🃏 Card Shoe Monte Carlo Predictor & Pivot Analytics")
+st.title(
+    "🃏 Card Shoe Monte Carlo Predictor & Last 30-Round Historical Analytics"
+)
 st.markdown(
-    "Predicting outcomes based on **Remaining Cards in the Shoe** (2-3 Decks) with Pivot Summary Analytics."
+    "Predicting the next round outcome based on **Remaining Cards in the Shoe** and **Last 30-Round Historical Trend Analysis**."
 )
 
 # Initialize Session State
@@ -96,9 +98,10 @@ num_sims = st.sidebar.slider(
     step=5000,
 )
 
+# Strict Confidence Threshold set to 90% as requested
 confidence_threshold = 90.0
 st.sidebar.info(
-    f"🔒 Strict Decision Threshold: **{confidence_threshold}%** (Will advise to bet ONLY if confidence reaches 90%+)"
+    f"🔒 Strict Decision Threshold: **{confidence_threshold}%**\n\n(Will advise to bet **ONLY** if confidence reaches 90%+)"
 )
 
 st.sidebar.markdown("---")
@@ -208,7 +211,9 @@ with btn_col2:
 
 # --- Section 2: Display History Table & Pivot Analytics ---
 st.markdown("---")
-st.subheader("2️⃣ Shoe History Table & Pivot Summary Analytics")
+st.subheader(
+    "2️⃣ Shoe History Table & Last 30-Round Historical Pivot Analytics"
+)
 
 if st.session_state.rounds:
     badges_html = ""
@@ -227,9 +232,10 @@ if st.session_state.rounds:
 
     st.markdown(badges_html, unsafe_allow_html=True)
 
-    tab_hist1, tab_hist2 = st.tabs(
-        ["📋 Detailed Round History", "📊 Pivot Summary Table (Card Frequency)"]
-    )
+    tab_hist1, tab_hist2 = st.tabs([
+        "📋 Detailed Round History",
+        "📊 Last 30-Round Pivot Analytics",
+    ])
 
     with tab_hist1:
         df_hist = pd.DataFrame([
@@ -253,9 +259,31 @@ if st.session_state.rounds:
 
     with tab_hist2:
         st.markdown(
-            "**Pivot Table:** แสดงจำนวนครั้งและความถี่ของหน้าไพ่แต่ละใบที่ถูกเปิดใช้งานไปแล้วในขอนนี้"
+            "**Last 30-Round Trend & Card Frequency Pivot:** Analyzes the subset of the last 30 rounds (or all rounds if less than 30)."
         )
-        # สร้าง Pivot Summary ของไพ่ที่ใช้ไปแล้ว
+        # ดึงเฉพาะ 30ตาล่าสุดมาทำ Pivot วิเคราะห์
+        last_30_rounds = st.session_state.rounds[-30:]
+        recent_winners = [r["winner"] for r in last_30_rounds]
+
+        r_count_30 = recent_winners.count("Red")
+        b_count_30 = recent_winners.count("Blue")
+        t_count_30 = recent_winners.count("Tie")
+        total_30 = len(recent_winners)
+
+        col_p1, col_p2, col_p3 = st.columns(3)
+        col_p1.metric(
+            "Last 30 Rounds - Red Wins",
+            f"{r_count_30} ({r_count_30/total_30*100:.1f}%)",
+        )
+        col_p2.metric(
+            "Last 30 Rounds - Blue Wins",
+            f"{b_count_30} ({b_count_30/total_30*100:.1f}%)",
+        )
+        col_p3.metric(
+            "Last 30 Rounds - Ties",
+            f"{t_count_30} ({t_count_30/total_30*100:.1f}%)",
+        )
+
         pivot_data = []
         for rank in range(1, 14):
             used_count = st.session_state.used_cards.count(rank)
@@ -263,7 +291,7 @@ if st.session_state.rounds:
                 "Card Rank": CARD_NAMES[rank],
                 "Used (2 Decks Max: 8)": f"{used_count} / 8",
                 "Used (3 Decks Max: 12)": f"{used_count} / 12",
-                "Total Used": used_count,
+                "Total Used in Shoe": used_count,
             })
         df_pivot = pd.DataFrame(pivot_data)
         st.dataframe(df_pivot, use_container_width=True, hide_index=True)
@@ -274,14 +302,18 @@ if st.session_state.rounds:
     tie_wins = sum(1 for r in st.session_state.rounds if r["winner"] == "Tie")
 
     st.caption(
-        f"Total Rounds: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}** | Cards Used: **{len(st.session_state.used_cards)}**"
+        f"Total Rounds Recorded: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}** | Cards Used: **{len(st.session_state.used_cards)}**"
     )
 else:
-    st.info("No rounds recorded yet in this shoe. Please record round history.")
+    st.info(
+        "No rounds recorded yet in this shoe. Please record round history."
+    )
 
 
-# --- Monte Carlo Simulation Function ---
-def run_monte_carlo(used_cards, rounds_history, game_mode, num_simulations):
+# --- Monte Carlo Simulation Combined with Last 30-Round History ---
+def run_monte_carlo_with_history(
+    used_cards, rounds_history, game_mode, num_simulations
+):
     possible_decks = [2, 3]
     valid_deck_results = {}
 
@@ -329,21 +361,43 @@ def run_monte_carlo(used_cards, rounds_history, game_mode, num_simulations):
     if not valid_deck_results:
         return {"Red": 45.0, "Blue": 45.0, "Tie": 10.0}, {}
 
-    avg_probs = {"Red": 0.0, "Blue": 0.0, "Tie": 0.0}
+    # ค่าเฉลี่ยจากส่วนที่เหลือในสำรับ (Shoe Composition)
+    avg_deck_probs = {"Red": 0.0, "Blue": 0.0, "Tie": 0.0}
     for d_res in valid_deck_results.values():
-        for k in avg_probs:
-            avg_probs[k] += d_res[k] / len(valid_deck_results)
+        for k in avg_deck_probs:
+            avg_deck_probs[k] += d_res[k] / len(valid_deck_results)
 
-    total_p = sum(avg_probs.values())
-    final_probs = {k: (v / total_p) * 100 for k, v in avg_probs.items()}
+    # ผสมผสานน้ำหนักจากประวัติ 30 ตาล่าสุด (History Trend Weighting: 70% Shoe Probability + 30% Last 30 Rounds Trend)
+    if len(rounds_history) > 0:
+        last_30 = rounds_history[-30:]
+        h_red = sum(1 for r in last_30 if r["winner"] == "Red")
+        h_blue = sum(1 for r in last_30 if r["winner"] == "Blue")
+        h_tie = sum(1 for r in last_30 if r["winner"] == "Tie")
+        h_total = len(last_30)
+
+        hist_probs = {
+            "Red": (h_red / h_total) * 100,
+            "Blue": (h_blue / h_total) * 100,
+            "Tie": (h_tie / h_total) * 100,
+        }
+
+        for k in avg_deck_probs:
+            avg_deck_probs[k] = (avg_deck_probs[k] * 0.70) + (
+                hist_probs[k] * 0.30
+            )
+
+    total_p = sum(avg_deck_probs.values())
+    final_probs = {k: (v / total_p) * 100 for k, v in avg_deck_probs.items()}
     return final_probs, valid_deck_results
 
 
 # --- Section 3: Prediction & Strict 90% Confidence Decision ---
 st.markdown("---")
-st.subheader("3️⃣ Monte Carlo Next Round Prediction & Decision")
+st.subheader(
+    "3️⃣ Monte Carlo & Last 30-Round Prediction & Strict Betting Decision"
+)
 
-final_probs, deck_breakdown = run_monte_carlo(
+final_probs, deck_breakdown = run_monte_carlo_with_history(
     st.session_state.used_cards, st.session_state.rounds, game_mode, num_sims
 )
 
@@ -352,21 +406,32 @@ m1.metric("🔴 Red Win Probability", f"{final_probs['Red']:.2f}%")
 m2.metric("🔵 Blue Win Probability", f"{final_probs['Blue']:.2f}%")
 m3.metric("🟢 Tie Probability", f"{final_probs['Tie']:.2f}%")
 
-best_side = "Red" if final_probs["Red"] >= final_probs["Blue"] else "Blue"
-best_side_name = "Red Side" if best_side == "Red" else "Blue Side"
+best_side = max(final_probs, key=final_probs.get)
+best_side_name = (
+    "Red Side"
+    if best_side == "Red"
+    else ("Blue Side" if best_side == "Blue" else "Tie")
+)
 best_prob = final_probs[best_side]
 
 st.markdown("### 🎯 Betting Recommendation (Strict 90% Rule):")
 
+# ตรรกะคุมเข้ม: ถ้าความน่าจะเป็นสูงสุดไม่ถึง 90% ห้ามแนะนำให้ลงแทงเด็ดขาด
 if best_prob >= confidence_threshold:
-    badge_cls = "red-win" if best_side == "Red" else "blue-win"
+    if best_side == "Tie":
+        badge_cls = "tie-win"
+    elif best_side == "Red":
+        badge_cls = "red-win"
+    else:
+        badge_cls = "blue-win"
+
     st.markdown(
-        f'<div class="big-badge {badge_cls}">✅ Recommendation: Bet on 【{best_side_name}】 — Absolutely Confirmed! (Confidence: {best_prob:.2f} >= 90%)</div>',
+        f'<div class="big-badge {badge_cls}">✅ Recommendation: Bet on 【{best_side_name}】 — Absolutely Confirmed! (Confidence: {best_prob:.2f}% >= 90%)</div>',
         unsafe_allow_html=True,
     )
 else:
     st.markdown(
-        f'<div class="big-badge wait-signal">⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {best_prob:.2f}% (Below strict 90% requirement). Skip this round!</div>',
+        f'<div class="big-badge wait-signal">⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {best_prob:.2f}% (Below the strict 90% requirement). Skip this round!</div>',
         unsafe_allow_html=True,
     )
 
