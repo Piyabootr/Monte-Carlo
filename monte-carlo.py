@@ -41,9 +41,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("🃏 Card Shoe Monte Carlo Predictor & Simulator")
+st.title("🃏 Card Shoe Monte Carlo Predictor & Pivot Analytics")
 st.markdown(
-    "Predicting outcomes based on **Remaining Cards in the Shoe** (2-3 Decks) using Monte Carlo Simulation."
+    "Predicting outcomes based on **Remaining Cards in the Shoe** (2-3 Decks) with Pivot Summary Analytics."
 )
 
 # Initialize Session State
@@ -96,7 +96,6 @@ num_sims = st.sidebar.slider(
     step=5000,
 )
 
-# Strict Confidence Threshold set to 90%
 confidence_threshold = 90.0
 st.sidebar.info(
     f"🔒 Strict Decision Threshold: **{confidence_threshold}%** (Will advise to bet ONLY if confidence reaches 90%+)"
@@ -188,6 +187,8 @@ with btn_col1:
 
             st.session_state.rounds.append({
                 "round": len(st.session_state.rounds) + 1,
+                "red_raw": red_selected,
+                "blue_raw": blue_selected,
                 "red_cards": [CARD_NAMES[c] for c in red_selected],
                 "blue_cards": [CARD_NAMES[c] for c in blue_selected],
                 "raw_cards": red_selected + blue_selected,
@@ -205,9 +206,9 @@ with btn_col2:
                     st.session_state.used_cards.remove(c)
             st.rerun()
 
-# --- Section 2: Display History Table & Roadmap ---
+# --- Section 2: Display History Table & Pivot Analytics ---
 st.markdown("---")
-st.subheader("2️⃣ Current Shoe History Table & Statistics")
+st.subheader("2️⃣ Shoe History Table & Pivot Summary Analytics")
 
 if st.session_state.rounds:
     badges_html = ""
@@ -226,6 +227,47 @@ if st.session_state.rounds:
 
     st.markdown(badges_html, unsafe_allow_html=True)
 
+    tab_hist1, tab_hist2 = st.tabs(
+        ["📋 Detailed Round History", "📊 Pivot Summary Table (Card Frequency)"]
+    )
+
+    with tab_hist1:
+        df_hist = pd.DataFrame([
+            {
+                "Round": r["round"],
+                "Red Cards": (
+                    ", ".join(r["red_cards"]) if r["red_cards"] else "-"
+                ),
+                "Blue Cards": (
+                    ", ".join(r["blue_cards"]) if r["blue_cards"] else "-"
+                ),
+                "Winner": (
+                    "🔴 Red"
+                    if r["winner"] == "Red"
+                    else ("🔵 Blue" if r["winner"] == "Blue" else "🟢 Tie")
+                ),
+            }
+            for r in st.session_state.rounds
+        ])
+        st.dataframe(df_hist, use_container_width=True, hide_index=True)
+
+    with tab_hist2:
+        st.markdown(
+            "**Pivot Table:** แสดงจำนวนครั้งและความถี่ของหน้าไพ่แต่ละใบที่ถูกเปิดใช้งานไปแล้วในขอนนี้"
+        )
+        # สร้าง Pivot Summary ของไพ่ที่ใช้ไปแล้ว
+        pivot_data = []
+        for rank in range(1, 14):
+            used_count = st.session_state.used_cards.count(rank)
+            pivot_data.append({
+                "Card Rank": CARD_NAMES[rank],
+                "Used (2 Decks Max: 8)": f"{used_count} / 8",
+                "Used (3 Decks Max: 12)": f"{used_count} / 12",
+                "Total Used": used_count,
+            })
+        df_pivot = pd.DataFrame(pivot_data)
+        st.dataframe(df_pivot, use_container_width=True, hide_index=True)
+
     total_r = len(st.session_state.rounds)
     red_wins = sum(1 for r in st.session_state.rounds if r["winner"] == "Red")
     blue_wins = sum(1 for r in st.session_state.rounds if r["winner"] == "Blue")
@@ -234,24 +276,6 @@ if st.session_state.rounds:
     st.caption(
         f"Total Rounds: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}** | Cards Used: **{len(st.session_state.used_cards)}**"
     )
-
-    # Detailed Table View
-    df_hist = pd.DataFrame([
-        {
-            "Round": r["round"],
-            "Red Cards": ", ".join(r["red_cards"]) if r["red_cards"] else "-",
-            "Blue Cards": (
-                ", ".join(r["blue_cards"]) if r["blue_cards"] else "-"
-            ),
-            "Winner": (
-                "🔴 Red"
-                if r["winner"] == "Red"
-                else ("🔵 Blue" if r["winner"] == "Blue" else "🟢 Tie")
-            ),
-        }
-        for r in st.session_state.rounds
-    ])
-    st.dataframe(df_hist, use_container_width=True, hide_index=True)
 else:
     st.info("No rounds recorded yet in this shoe. Please record round history.")
 
