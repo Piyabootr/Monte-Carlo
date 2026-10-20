@@ -50,7 +50,6 @@ st.markdown(
 
 # Initialize Session State for Grid Table History
 if "grid_history" not in st.session_state:
-    # สร้างตารางกริดเริ่มต้น 10 แถวเพื่อให้ผู้ใช้งานสามารถพิมพ์หรือเลือกกรอกย้อนหลังได้ทันที
     initial_data = []
     for i in range(1, 11):
         initial_data.append({
@@ -109,7 +108,6 @@ st.markdown(
     "💡 **คุณสามารถคลิกช่องในตารางด้านล่างเพื่อพิมพ์ หรือติ๊กเลือกผลย้อนหลังได้โดยตรงเหมือน Excel** เพื่อให้ระบบนำไปวิเคราะห์ผลลัพธ์ 30 ตาและรัน Monte Carlo ต่อไป"
 )
 
-# สร้าง Data Editor (Grid Table ที่แก้ไขได้)
 edited_grid_df = st.data_editor(
     st.session_state.grid_history,
     num_rows="dynamic",
@@ -117,19 +115,14 @@ edited_grid_df = st.data_editor(
     key="grid_editor",
 )
 
-# อัปเดตข้อมูลตารางกริดลงใน Session State
 st.session_state.grid_history = edited_grid_df
 
-# ประมวลผลข้อมูลจากตารางกริด แปลงเป็นประวัติการออกผล (Rounds List)
 processed_rounds = []
-used_cards_from_grid = []
-
 for idx, row in edited_grid_df.iterrows():
     r_win = row.get("Red Winner", False)
     b_win = row.get("Blue Winner", False)
     t_win = row.get("Tie (Draw)", False)
 
-    # ตรวจสอบว่าตานั้นมีการเลือกผลแพ้ชนะหรือไม่
     winner = None
     if r_win:
         winner = "Red"
@@ -150,7 +143,6 @@ st.markdown("---")
 st.subheader("2️⃣ Roadmap & Last 30-Round Trend Analytics")
 
 if processed_rounds:
-    # แสดงจุดสี Roadmap
     badges_html = ""
     for r in processed_rounds:
         if r["winner"] == "Red":
@@ -162,11 +154,11 @@ if processed_rounds:
         else:
             bg = "#2ca02c"
             txt = "T"
-        badges_html += f'<span class="history-dot" style="background-color:{bg};" title="Round {r[\'round\']}">{txt}</span>'
+        round_num = r["round"]
+        badges_html += f'<span class="history-dot" style="background-color:{bg};" title="Round {round_num}">{txt}</span>'
 
     st.markdown(badges_html, unsafe_allow_html=True)
 
-    # วิเคราะห์ย้อนหลัง 30 ตา (Last 30 Rounds Analysis)
     last_30_rounds = processed_rounds[-30:]
     recent_winners = [r["winner"] for r in last_30_rounds]
 
@@ -256,7 +248,6 @@ def run_monte_carlo_grid(used_cards, rounds_history, game_mode, num_simulations)
         for k in avg_deck_probs:
             avg_deck_probs[k] += d_res[k] / len(valid_deck_results)
 
-    # ผสมผสานน้ำหนักจากประวัติ 30 ตาล่าสุด (70% Shoe Probability + 30% Last 30 Rounds Trend)
     if len(rounds_history) > 0:
         last_30 = rounds_history[-30:]
         h_red = sum(1 for r in last_30 if r["winner"] == "Red")
@@ -284,7 +275,6 @@ def run_monte_carlo_grid(used_cards, rounds_history, game_mode, num_simulations)
 st.markdown("---")
 st.subheader("3️⃣ Monte Carlo Next Round Prediction & Strict Betting Decision")
 
-# สมมติฐาน used_cards เปล่าหรือดึงจากการวิเคราะห์กริด
 final_probs, deck_breakdown = run_monte_carlo_grid(
     [], processed_rounds, game_mode, num_sims
 )
@@ -304,7 +294,6 @@ best_prob = final_probs[best_side]
 
 st.markdown("### 🎯 Betting Recommendation (Strict 90% Rule):")
 
-# คุมเข้ม: ถ้าความน่าจะเป็นไม่ถึง 90% ห้ามแนะนำให้ลงแทงเด็ดขาด
 if best_prob >= confidence_threshold:
     if best_side == "Tie":
         badge_cls = "tie-win"
