@@ -204,9 +204,7 @@ with btn_col1:
             st.rerun()
 
 with btn_col2:
-    if st.button(
-        "↩️ ลบตาที่บันทึกไว้ล่าสุด (Undo)", use_container_width=True
-    ):
+    if st.button("↩️ ลบตาที่บันทึกไว้ล่าสุด (Undo)", use_container_width=True):
         if st.session_state.rounds:
             last_round = st.session_state.rounds.pop()
             for c in last_round["raw_cards"]:
@@ -230,7 +228,8 @@ if st.session_state.rounds:
         else:
             bg = "#2ca02c"
             txt = "เสมอ"
-        badges_html += f'<span class="history-dot" style="background-color:{bg};" title="ตาที่ {r[\'round\']}">{txt}</span>'
+        round_num = r["round"]
+        badges_html += f'<span class="history-dot" style="background-color:{bg};" title="ตาที่ {round_num}">{txt}</span>'
 
     st.markdown(badges_html, unsafe_allow_html=True)
 
