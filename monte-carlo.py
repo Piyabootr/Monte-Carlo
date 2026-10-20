@@ -42,16 +42,16 @@ st.markdown(
 )
 
 st.title(
-    "🃏 Card Shoe Monte Carlo Predictor & Editable Grid History Analytics"
+    "🃏 Card Shoe Monte Carlo Predictor & 50-Round Editable Grid Analytics"
 )
 st.markdown(
-    "Predicting outcomes using **Editable Grid Data Entry**, **Last 30-Round Analytics**, and **Remaining Cards Simulation**."
+    "Predicting outcomes using a **50-Round Editable Grid Table**, **Last 30-Round Analytics**, and **Remaining Cards Simulation**."
 )
 
-# Initialize Session State for Grid Table History
+# Initialize Session State for Grid Table History (Total 50 Rounds)
 if "grid_history" not in st.session_state:
     initial_data = []
-    for i in range(1, 11):
+    for i in range(1, 51):
         initial_data.append({
             "Round": i,
             "Red Winner": False,
@@ -91,7 +91,7 @@ if st.sidebar.button(
     "🗑️ Reset Grid Data & Clear History", use_container_width=True
 ):
     reset_data = []
-    for i in range(1, 11):
+    for i in range(1, 51):
         reset_data.append({
             "Round": i,
             "Red Winner": False,
@@ -102,10 +102,10 @@ if st.sidebar.button(
     st.session_state.grid_history = pd.DataFrame(reset_data)
     st.rerun()
 
-# --- Section 1: Editable Grid Table for Historical Data Analysis ---
-st.subheader("1️⃣ Editable Grid Table (Historical Data Entry & Analysis)")
+# --- Section 1: Editable Grid Table for Historical Data Analysis (50 Rounds) ---
+st.subheader("1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)")
 st.markdown(
-    "💡 **คุณสามารถคลิกช่องในตารางด้านล่างเพื่อพิมพ์ หรือติ๊กเลือกผลย้อนหลังได้โดยตรงเหมือน Excel** เพื่อให้ระบบนำไปวิเคราะห์ผลลัพธ์ 30 ตาและรัน Monte Carlo ต่อไป"
+    "💡 **ตารางกริด 50 รอบ:** คุณสามารถคลิกติ๊กเลือกผลย้อนหลัง (Red, Blue, Tie) หรือพิมพ์บันทึกข้อมูลย้อนหลังได้โดยตรงเหมือนใช้งาน Excel เพื่อใช้ Analyze ร่วมกับการจำลอง"
 )
 
 edited_grid_df = st.data_editor(
@@ -159,6 +159,7 @@ if processed_rounds:
 
     st.markdown(badges_html, unsafe_allow_html=True)
 
+    # วิเคราะห์ย้อนหลัง 30 ตา
     last_30_rounds = processed_rounds[-30:]
     recent_winners = [r["winner"] for r in last_30_rounds]
 
@@ -186,11 +187,11 @@ if processed_rounds:
     tie_wins = sum(1 for r in processed_rounds if r["winner"] == "Tie")
 
     st.caption(
-        f"Total Valid Rounds: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}**"
+        f"Total Valid Rounds Recorded: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}**"
     )
 else:
     st.info(
-        "กรุณากรอกข้อมูลผลแพ้ชนะในตารางกริดด้านบน (ติ๊กถูกช่อง Red, Blue หรือ Tie) เพื่อเริ่มการวิเคราะห์"
+        "กรุณากรอกผลการแข่งขันในตารางกริด 50 รอบด้านบน เพื่อเริ่มระบบวิเคราะห์"
     )
 
 
