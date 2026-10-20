@@ -2,17 +2,17 @@ import random
 import pandas as pd
 import streamlit as st
 
-# ตั้งค่าหน้าเว็บ Streamlit
+# Page Configuration
 st.set_page_config(
     page_title="Card Shoe Monte Carlo Simulator", page_icon="🃏", layout="wide"
 )
 
-# สไตล์ CSS เพิ่มเติมสำหรับ UI
+# Custom CSS Styling
 st.markdown(
     """
 <style>
     .big-badge {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: bold;
         padding: 15px;
         border-radius: 10px;
@@ -25,15 +25,15 @@ st.markdown(
     .wait-signal { background-color: #6c757d; color: white; }
     .history-dot {
         display: inline-block;
-        width: 38px;
-        height: 38px;
-        line-height: 38px;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
         border-radius: 50%;
         text-align: center;
         font-weight: bold;
         color: white;
-        margin: 4px;
-        font-size: 14px;
+        margin: 3px;
+        font-size: 13px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 </style>
@@ -41,12 +41,12 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.title("🃏 ระบบจำลอง Monte Carlo วิเคราะห์ไพ่ในขอน (2-3 สำรับ)")
+st.title("🃏 Card Shoe Monte Carlo Predictor & Simulator")
 st.markdown(
-    "ระบบคำนวณความน่าจะเป็นจาก **ไพ่ที่ถูกเปิดออกไปแล้ว** (Drawing Without Replacement) โดยจำลองสถานการณ์พร้อมกันทั้งกรณีไพ่ 2 สำรับ และ 3 สำรับ"
+    "Predicting outcomes based on **Remaining Cards in the Shoe** (2-3 Decks) using Monte Carlo Simulation."
 )
 
-# --- จัดการ Session State สำหรับเก็บประวัติ ---
+# Initialize Session State
 if "rounds" not in st.session_state:
     st.session_state.rounds = []
 
@@ -71,58 +71,53 @@ CARD_NAMES = {
 
 
 def get_card_point(card_rank, game_mode):
-    """คำนวณแต้มไพ่ตามโหมดกติกา"""
-    if (
-        game_mode
-        == "โหมดแต้มรวมหลักหน่วย (เช่น บาคาร่า / ป๊อกเด้ง: 10, J, Q, K = 0 แต้ม)"
-    ):
+    if "Baccarat" in game_mode:
         return 0 if card_rank >= 10 else card_rank
     else:
         return card_rank
 
 
-# --- แถบตั้งค่าด้านข้าง (Sidebar) ---
-st.sidebar.header("⚙️ ตั้งค่าพารามิเตอร์การจำลอง")
+# --- Sidebar Settings ---
+st.sidebar.header("⚙️ Simulation Parameters")
 
 game_mode = st.sidebar.radio(
-    "รูปแบบการคิดแต้มของกติกา:",
+    "Game Scoring Mode:",
     [
-        "โหมดแต้มรวมหลักหน่วย (เช่น บาคาร่า / ป๊อกเด้ง: 10, J, Q, K = 0 แต้ม)",
-        "โหมดวัดแต้มหน้าไพ่สูงสุด (เช่น เสือมังกร: A=1 ถึง K=13)",
+        "Baccarat / Dragon Tiger Style (10, J, Q, K = 0 for Baccarat)",
+        "Single Card High Value (A=1 to K=13)",
     ],
 )
 
 num_sims = st.sidebar.slider(
-    "จำนวนรอบจำลอง Monte Carlo (ต่อสำรับ)",
-    min_value=5000,
+    "Monte Carlo Iterations (per deck)",
+    min_value=10000,
     max_value=50000,
     value=20000,
     step=5000,
 )
-confidence_threshold = st.sidebar.slider(
-    "เกณฑ์ความได้เปรียบขั้นต่ำที่จะฟันธง (%)",
-    min_value=45.0,
-    max_value=60.0,
-    value=48.5,
-    step=0.5,
+
+# Strict Confidence Threshold set to 90% as requested
+confidence_threshold = 90.0
+st.sidebar.info(
+    f"🔒 Strict Decision Threshold: **{confidence_threshold}%** (Will advise to bet ONLY if confidence reaches 90%+)"
 )
 
 st.sidebar.markdown("---")
 if st.sidebar.button(
-    "🗑️ ล้างข้อมูลเริ่มขอนใหม่ (Reset Shoe)", use_container_width=True
+    "🗑️ Reset Shoe & Clear History", use_container_width=True
 ):
     st.session_state.rounds = []
     st.session_state.used_cards = []
     st.rerun()
 
-# --- ส่วนที่ 1: บันทึกประวัติการออกของไพ่และฝ่ายที่ชนะ ---
-st.subheader("1️⃣ บันทึกหน้าไพ่ที่ออกและฝ่ายที่ชนะในตานั้น")
+# --- Section 1: Record Round History & Cards ---
+st.subheader("1️⃣ Record Round History & Drawn Cards")
 
 col_in1, col_in2, col_in3 = st.columns([2, 2, 1.5])
 
 with col_in1:
     red_selected = st.multiselect(
-        "🔴 เลือกเลขไพ่ที่ออกของ【ฝ่ายแดง】:",
+        "🔴 Cards Drawn by【Red Side】:",
         options=list(CARD_NAMES.keys()),
         format_func=lambda x: CARD_NAMES[x],
         key="red_input",
@@ -130,7 +125,7 @@ with col_in1:
 
 with col_in2:
     blue_selected = st.multiselect(
-        "🔵 เลือกเลขไพ่ที่ออกของ【ฝ่ายน้ำเงิน】:",
+        "🔵 Cards Drawn by【Blue Side】:",
         options=list(CARD_NAMES.keys()),
         format_func=lambda x: CARD_NAMES[x],
         key="blue_input",
@@ -138,31 +133,29 @@ with col_in2:
 
 with col_in3:
     winner_choice = st.selectbox(
-        "🏆 ฝ่ายที่ชนะในตานี้:",
+        "🏆 Actual Winner:",
         options=[
-            "คำนวณอัตโนมัติจากหน้าไพ่",
-            "แดง (Red)",
-            "น้ำเงิน (Blue)",
-            "เสมอ (Tie)",
+            "Auto-calculate from cards",
+            "Red Win",
+            "Blue Win",
+            "Tie (Draw)",
         ],
     )
 
 btn_col1, btn_col2 = st.columns([1, 1])
 with btn_col1:
-    if st.button(
-        "➕ บันทึกผลตานี้เข้าสู่ระบบ", type="primary", use_container_width=True
-    ):
+    if st.button("➕ Record Round", type="primary", use_container_width=True):
         if (
             not red_selected
             and not blue_selected
-            and winner_choice == "คำนวณอัตโนมัติจากหน้าไพ่"
+            and winner_choice == "Auto-calculate from cards"
         ):
             st.warning(
-                "⚠️ กรุณาเลือกหน้าไพ่ของฝ่ายแดง/น้ำเงิน หรือระบุฝ่ายที่ชนะก่อนบันทึกครับ"
+                "⚠️ Please select cards or specify the winner before recording."
             )
         else:
-            if winner_choice == "คำนวณอัตโนมัติจากหน้าไพ่":
-                if "หลักหน่วย" in game_mode:
+            if winner_choice == "Auto-calculate from cards":
+                if "Baccarat" in game_mode:
                     r_score = (
                         sum(get_card_point(c, game_mode) for c in red_selected)
                         % 10
@@ -186,9 +179,9 @@ with btn_col1:
                 else:
                     win_res = "Tie"
             else:
-                if "แดง" in winner_choice:
+                if "Red" in winner_choice:
                     win_res = "Red"
-                elif "น้ำเงิน" in winner_choice:
+                elif "Blue" in winner_choice:
                     win_res = "Blue"
                 else:
                     win_res = "Tie"
@@ -204,7 +197,7 @@ with btn_col1:
             st.rerun()
 
 with btn_col2:
-    if st.button("↩️ ลบตาที่บันทึกไว้ล่าสุด (Undo)", use_container_width=True):
+    if st.button("↩️ Undo Last Round", use_container_width=True):
         if st.session_state.rounds:
             last_round = st.session_state.rounds.pop()
             for c in last_round["raw_cards"]:
@@ -212,24 +205,24 @@ with btn_col2:
                     st.session_state.used_cards.remove(c)
             st.rerun()
 
-# --- แสดงกระดานประวัติ (Roadmap & Card Counter) ---
+# --- Section 2: Display History Table & Roadmap ---
 st.markdown("---")
-st.subheader("2️⃣ ประวัติการออกไพ่และสถานะขอนไพ่ปัจจุบัน")
+st.subheader("2️⃣ Current Shoe History & Statistics")
 
 if st.session_state.rounds:
     badges_html = ""
     for r in st.session_state.rounds:
         if r["winner"] == "Red":
             bg = "#ff4b4b"
-            txt = "แดง"
+            txt = "R"
         elif r["winner"] == "Blue":
             bg = "#1f77b4"
-            txt = "น้ำเงิน"
+            txt = "B"
         else:
             bg = "#2ca02c"
-            txt = "เสมอ"
+            txt = "T"
         round_num = r["round"]
-        badges_html += f'<span class="history-dot" style="background-color:{bg};" title="ตาที่ {round_num}">{txt}</span>'
+        badges_html += f'<span class="history-dot" style="background-color:{bg};" title="Round {round_num}">{txt}</span>'
 
     st.markdown(badges_html, unsafe_allow_html=True)
 
@@ -239,38 +232,34 @@ if st.session_state.rounds:
     tie_wins = sum(1 for r in st.session_state.rounds if r["winner"] == "Tie")
 
     st.caption(
-        f"รวมทั้งหมด: **{total_r}** ตา | 🔴 แดงชนะ: **{red_wins}** | 🔵 น้ำเงินชนะ: **{blue_wins}** | 🟢 เสมอ: **{tie_wins}** | ไพ่ถูกเปิดออกไปแล้ว: **{len(st.session_state.used_cards)}** ใบ"
+        f"Total Rounds: **{total_r}** | Red Wins: **{red_wins}** | Blue Wins: **{blue_wins}** | Ties: **{tie_wins}** | Cards Used: **{len(st.session_state.used_cards)}**"
     )
 
-    with st.expander("📋 ดูตารางรายละเอียดเลขไพ่ที่ออกย้อนหลัง"):
-        df_hist = pd.DataFrame([
-            {
-                "ตาที่": r["round"],
-                "ไพ่ฝ่ายแดง": (
-                    ", ".join(r["red_cards"]) if r["red_cards"] else "-"
-                ),
-                "ไพ่ฝ่ายน้ำเงิน": (
-                    ", ".join(r["blue_cards"]) if r["blue_cards"] else "-"
-                ),
-                "ฝ่ายที่ชนะ": (
-                    "🔴 แดง"
-                    if r["winner"] == "Red"
-                    else ("🔵 น้ำเงิน" if r["winner"] == "Blue" else "🟢 เสมอ")
-                ),
-            }
-            for r in st.session_state.rounds
-        ])
-        st.dataframe(df_hist, use_container_width=True, hide_index=True)
+    # Detailed Table View as requested
+    df_hist = pd.DataFrame([
+        {
+            "Round": r["round"],
+            "Red Cards": ", ".join(r["red_cards"]) if r["red_cards"] else "-",
+            "Blue Cards": (
+                ", ".join(r["blue_cards"]) if r["blue_cards"] else "-"
+            ),
+            "Winner": (
+                "🔴 Red"
+                if r["winner"] == "Red"
+                else ("🔵 Blue" if r["winner"] == "Blue" else "🟢 Tie")
+            ),
+        }
+        for r in st.session_state.rounds
+    ])
+    st.dataframe(df_hist, use_container_width=True, hide_index=True)
 else:
     st.info(
-        "ยังไม่มีประวัติไพ่ในขอนนี้ คุณสามารถเริ่มบันทึกไพ่ที่ออก หรือดูผลจำลองเริ่มต้นได้เลย"
+        "No rounds recorded yet in this shoe. Please record cards or view baseline simulation below."
     )
 
 
-# --- ฟังก์ชันจำลอง Monte Carlo (2-3 สำรับ) ---
-def run_multi_deck_monte_carlo(
-    used_cards, rounds_history, game_mode, num_simulations=20000
-):
+# --- Monte Carlo Simulation Function ---
+def run_monte_carlo(used_cards, rounds_history, game_mode, num_simulations):
     possible_decks = [2, 3]
     valid_deck_results = {}
 
@@ -279,28 +268,25 @@ def run_multi_deck_monte_carlo(
         is_possible = True
 
         for rank in range(1, 14):
-            max_cards_of_rank = 4 * d_count
-            used_of_rank = used_cards.count(rank)
-
-            if used_of_rank > max_cards_of_rank:
+            max_cards = 4 * d_count
+            used_count = used_cards.count(rank)
+            if used_count > max_cards:
                 is_possible = False
                 break
-
-            remaining_count = max_cards_of_rank - used_of_rank
-            remaining_shoe.extend([rank] * remaining_count)
+            remaining_shoe.extend([rank] * (max_cards - used_count))
 
         if not is_possible or len(remaining_shoe) < 6:
             continue
 
         sim_counts = {"Red": 0, "Blue": 0, "Tie": 0}
-        cards_per_side = 2 if "หลักหน่วย" in game_mode else 1
+        cards_per_side = 2 if "Baccarat" in game_mode else 1
 
         for _ in range(num_simulations):
             sampled = random.sample(remaining_shoe, cards_per_side * 2)
             r_hand = sampled[:cards_per_side]
             b_hand = sampled[cards_per_side:]
 
-            if "หลักหน่วย" in game_mode:
+            if "Baccarat" in game_mode:
                 r_pts = sum(0 if c >= 10 else c for c in r_hand) % 10
                 b_pts = sum(0 if c >= 10 else c for c in b_hand) % 10
             else:
@@ -321,85 +307,53 @@ def run_multi_deck_monte_carlo(
     if not valid_deck_results:
         return {"Red": 45.0, "Blue": 45.0, "Tie": 10.0}, {}
 
-    avg_deck_probs = {"Red": 0.0, "Blue": 0.0, "Tie": 0.0}
-    for d_probs in valid_deck_results.values():
-        for k in avg_deck_probs:
-            avg_deck_probs[k] += d_probs[k] / len(valid_deck_results)
+    avg_probs = {"Red": 0.0, "Blue": 0.0, "Tie": 0.0}
+    for d_res in valid_deck_results.values():
+        for k in avg_probs:
+            avg_probs[k] += d_res[k] / len(valid_deck_results)
 
-    if len(rounds_history) >= 3:
-        last_winner = rounds_history[-1]["winner"]
-        trans_counts = {"Red": 0, "Blue": 0, "Tie": 0}
-        trans_total = 0
-        for i in range(len(rounds_history) - 1):
-            if rounds_history[i]["winner"] == last_winner:
-                nxt = rounds_history[i + 1]["winner"]
-                trans_counts[nxt] += 1
-                trans_total += 1
-
-        if trans_total > 0:
-            for k in avg_deck_probs:
-                markov_prob = (trans_counts[k] / trans_total) * 100
-                avg_deck_probs[k] = (avg_deck_probs[k] * 0.80) + (
-                    markov_prob * 0.20
-                )
-
-    total_p = sum(avg_deck_probs.values())
-    final_probs = {k: (v / total_p) * 100 for k, v in avg_deck_probs.items()}
-
+    total_p = sum(avg_probs.values())
+    final_probs = {k: (v / total_p) * 100 for k, v in avg_probs.items()}
     return final_probs, valid_deck_results
 
 
-# --- ส่วนที่ 3: แสดงผลการจำลองและคำแนะนำฟันธงล่วงหน้า ---
+# --- Section 3: Prediction & Strict 90% Confidence Decision ---
 st.markdown("---")
-st.subheader("3️⃣ ผลการจำลอง Monte Carlo ล่วงหน้า (ตาถัดไป)")
+st.subheader("3️⃣ Monte Carlo Next Round Prediction & Decision")
 
-final_probs, deck_breakdown = run_multi_deck_monte_carlo(
+final_probs, deck_breakdown = run_monte_carlo(
     st.session_state.used_cards, st.session_state.rounds, game_mode, num_sims
 )
 
-m_col1, m_col2, m_col3 = st.columns(3)
-m_col1.metric("🔴 โอกาสออก【ฝ่ายแดง】", f"{final_probs['Red']:.2f}%")
-m_col2.metric("🔵 โอกาสออก【ฝ่ายน้ำเงิน】", f"{final_probs['Blue']:.2f}%")
-m_col3.metric("🟢 โอกาสออก【เสมอ】", f"{final_probs['Tie']:.2f}%")
+m1, m2, m3 = st.columns(3)
+m1.metric("🔴 Red Win Probability", f"{final_probs['Red']:.2f}%")
+m2.metric("🔵 Blue Win Probability", f"{final_probs['Blue']:.2f}%")
+m3.metric("🟢 Tie Probability", f"{final_probs['Tie']:.2f}%")
 
 best_side = "Red" if final_probs["Red"] >= final_probs["Blue"] else "Blue"
-best_side_th = "ฝ่ายแดง (Red)" if best_side == "Red" else "ฝ่ายน้ำเงิน (Blue)"
+best_side_name = "Red Side" if best_side == "Red" else "Blue Side"
 best_prob = final_probs[best_side]
-prob_diff = abs(final_probs["Red"] - final_probs["Blue"])
 
-st.markdown("### 🎯 คำแนะนำการตัดสินใจในตาถัดไป:")
+st.markdown("### 🎯 Betting Recommendation (Strict 90% Rule):")
 
-if final_probs["Tie"] >= 20.0:
+if best_prob >= confidence_threshold:
+    badge_cls = "red-win" if best_side == "Red" else "blue-win"
     st.markdown(
-        f'<div class="big-badge tie-win">✅ ควรลง: 【เสมอ (Tie)】 — ถูกต้องเเน่นอน! (โอกาสพุ่งสูงถึง {final_probs["Tie"]:.2f}%)</div>',
-        unsafe_allow_html=True,
-    )
-elif best_prob >= confidence_threshold and prob_diff >= 1.5:
-    badge_class = "red-win" if best_side == "Red" else "blue-win"
-    st.markdown(
-        f'<div class="big-badge {badge_class}">✅ ควรลง: 【{best_side_th}】 — ถูกต้องเเน่นอน! (โอกาสชนะ {best_prob:.2f}% | เหนือกว่าอีกฝั่ง {prob_diff:.2f}%)</div>',
+        f'<div class="big-badge {badge_cls}">✅ Recommendation: Bet on 【{best_side_name}】 — Absolutely Confirmed! (Confidence: {best_prob:.2f} >= 90%)</div>',
         unsafe_allow_html=True,
     )
 else:
     st.markdown(
-        f'<div class="big-badge wait-signal">⛔ ตานี้【ไม่ควรลง (ข้าม/Wait)】 — ความน่าจะเป็นสองฝั่งยังสูสีกันเกินไป (ต่างกันเพียง {prob_diff:.2f}%) รอจังหวะไพ่ชัดเจนกว่านี้</div>',
+        f'<div class="big-badge wait-signal">⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {best_prob:.2f}% (Below the strict 90% requirement). Skip this round!</div>',
         unsafe_allow_html=True,
     )
 
 if deck_breakdown:
-    with st.expander(
-        "🔍 ดูผลการจำลองแยกตามสมมติฐานจำนวนสำรับ (2 สำรับ vs 3 สำรับ)"
-    ):
-        cols_d = st.columns(len(deck_breakdown))
+    with st.expander("🔍 View Simulation Breakdown by Deck Hypotheses"):
+        cols = st.columns(len(deck_breakdown))
         for idx, (d_num, d_res) in enumerate(deck_breakdown.items()):
-            with cols_d[idx]:
-                st.markdown(
-                    f"**กรณีไพ่ขอนนี้มี {d_num} สำรับ ({d_num*52 - len(st.session_state.used_cards)} ใบที่เหลือ):**"
-                )
-                st.write(f"- 🔴 แดง: `{d_res['Red']:.2f}%`")
-                st.write(f"- 🔵 น้ำเงิน: `{d_res['Blue']:.2f}%`")
-                st.write(f"- 🟢 เสมอ: `{d_res['Tie']:.2f}%`")
-else:
-    st.error(
-        "⚠️ จำนวนไพ่ที่ระบุเกินขีดจำกัดของไพ่ 3 สำรับ กรุณาตรวจสอบประวัติไพ่หรือกดล้างขอนใหม่"
-    )
+            with cols[idx]:
+                st.markdown(f"**Hypothesis: {d_num} Decks Left**")
+                st.write(f"- Red: `{d_res['Red']:.2f}%`")
+                st.write(f"- Blue: `{d_res['Blue']:.2f}%`")
+                st.write(f"- Tie: `{d_res['Tie']:.2f}%`")
