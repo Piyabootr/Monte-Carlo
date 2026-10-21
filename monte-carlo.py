@@ -45,6 +45,17 @@ st.markdown(
         font-weight: bold;
         text-align: center;
     }
+    .volatility-box {
+        background: rgba(220, 38, 38, 0.2);
+        border: 1px solid #ef4444;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        color: #fca5a5;
+    }
     .sim-box {
         background: rgba(30, 41, 59, 0.8);
         border: 1px solid #334155;
@@ -63,7 +74,7 @@ st.markdown(
         margin-bottom: 15px;
         box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.7);
     }
-    .consensus-pass { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: 2px solid #10b981; }
+    .consensus-pass { background: linear-gradient(135deg, #059669 0%, #064e3b 100%); color: white; border: 2px solid #10b981; }
     .consensus-fail { background: rgba(15, 23, 42, 0.95); color: #94a3b8; border: 2px solid rgba(239, 68, 68, 0.6); }
     .history-dot {
         display: inline-block;
@@ -104,19 +115,20 @@ lang = st.sidebar.selectbox(
 translations = {
     "English": {
         "title": "🃏 ADVANCED 5-ALGORITHM PRO PREDICTOR",
-        "subtitle": "Intensified AI with Bankroll Management, Profit Targets, Pattern Analyzer & What-If Matrix.",
+        "subtitle": "Intensified AI with Bankroll Management, Profit Targets, Anti-False-Positive Filter & What-If Matrix.",
         "bankroll_title": "💰 Bankroll & Risk Management",
         "init_fund": "Initial Capital",
         "target_profit": "Daily Profit Goal",
         "max_loss": "Max Stop-Loss Limit",
         "base_bet": "Base Unit Bet Size",
         "grid_title": "1️⃣ Historical Data & P/L Entry (50 Rounds)",
-        "grid_desc": "💡 Fill out the round outcomes and your actual Profit/Loss in **My P/L** column. Click **Confirm Data** to analyze.",
+        "grid_desc": "💡 Fill out round outcomes and actual Profit/Loss in **My P/L**. Click **Confirm Data** to analyze.",
         "confirm_btn": "✅ Confirm Grid Data & Analyze",
         "confirm_success": "✅ Data Confirmed! Ready for analysis.",
         "roadmap_title": "2️⃣ Roadmap & Real-time Pattern Analyzer",
         "streak_msg": "🔥 DRAGON STREAK ALERT: {side} has repeated for {count} consecutive rounds!",
         "pingpong_msg": "🏓 PING-PONG ALTERNATING DETECTED: Sides have switched back and forth for {count} rounds!",
+        "volatility_warning": "⚠️ HIGH VOLATILITY WARNING: Choppy shoe detected! Anti-False-Positive Guard has overridden the signal to WAIT.",
         "analytics_title": "💰 Bankroll & Profit Analytics",
         "metric_capital": "Current Capital",
         "metric_pl": "Total Profit/Loss",
@@ -132,7 +144,7 @@ translations = {
         "if_blue": "If Next is BLUE (Win/Loss P/L)",
         "if_tie": "If Next is TIE (Win/Loss P/L)",
         "confirmed_status": "CONFIRMED (4:1)",
-        "wait_status": "WAIT (Split)",
+        "wait_status": "WAIT (Split/Volatile)",
         "algo_intensity_header": "⚡ Algorithm Intensification & Accuracy Profiles",
         "algo_1_name": "1. Deep Monte Carlo",
         "algo_1_desc": "Analyzes remaining shoe composition probability weights with high-iteration simulations. Estimated Accuracy: ~88%",
@@ -146,11 +158,11 @@ translations = {
         "algo_5_desc": "Deep historical sequence matching engine scanning for repeating multi-round chunks. Estimated Accuracy: ~89%",
         "algo_1": "1. Deep MC", "algo_2": "2. 2-Step HMM", "algo_3": "3. Pro Bayesian", "algo_4": "4. EMA Momentum", "algo_5": "5. N-Gram Pattern",
         "intensified": "HIGH INTENSITY",
-        "rec_title": "🎯 Actionable Strategy (4:1 Majority Rule):",
+        "rec_title": "🎯 Actionable Strategy (4:1 Majority Rule + Guard):",
         "conf_level": "📊 Dashboard Confidence Level",
         "algo_aligned": "Algorithms Aligned",
         "pass_msg": "✅ INVEST SIGNAL CONFIRMED! Target Side: 【",
-        "fail_msg": "⛔ WAIT / DO NOT INVEST: Algorithms split. Preserve your bankroll!",
+        "fail_msg": "⛔ WAIT / DO NOT INVEST: Algorithms split or market is too choppy. Preserve your bankroll!",
         "pred_stake": "💡 Predicted Stake Size for Next Round:",
         "wait_stake": "0 (WAIT)",
         "reset": "🗑️ Reset Data & Clear History",
@@ -161,19 +173,20 @@ translations = {
     },
     "ไทย": {
         "title": "🃏 แดชบอร์ดพยากรณ์ขั้นสูง 5 อัลกอริทึม",
-        "subtitle": "ระบบวิเคราะห์เข้มข้น พร้อมคำนวณเงินทุน กำไร ตัววิเคราะห์เค้าไพ่ และเมทริกซ์จำลองสถานการณ์การเดินเงิน",
+        "subtitle": "ระบบวิเคราะห์เข้มข้น พร้อมระบบกรองสัญญาณหลอก (Anti-False-Positive Guard) และจำลองการเดินเงิน",
         "bankroll_title": "💰 ตั้งค่าเงินทุนและเป้าหมาย",
         "init_fund": "เงินทุนเริ่มต้น",
         "target_profit": "เป้าหมายกำไรต่อวัน",
         "max_loss": "จุดตัดขาดทุนสูงสุด",
         "base_bet": "เงินเดิมพันขั้นต่ำ",
         "grid_title": "1️⃣ ตารางบันทึกผลและกำไร/ขาดทุน (50 รอบ)",
-        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริง (ได้เสียเป็นบาท) ที่ช่อง My P/L จากนั้นกด Confirm",
+        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริง (ได้เสียเป็นบาท) ที่ช่อง `My P/L` จากนั้นกด Confirm",
         "confirm_btn": "✅ ยืนยันข้อมูลและเริ่มวิเคราะห์",
         "confirm_success": "✅ ยืนยันข้อมูลสำเร็จ! ระบบพร้อมวิเคราะห์แล้ว",
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และตัววิเคราะห์เค้าไพ่",
         "streak_msg": "🔥 เค้าไพ่มังกรมาแล้ว: ฝั่ง {side} ออกติดต่อกันยาวนานถึง {count} ตาแล้ว!",
         "pingpong_msg": "🏓 เค้าไพ่ปิงปองสลับ: ออกสลับฝั่งต่อเนื่องกัน {count} ตาแล้ว!",
+        "volatility_warning": "⚠️ เตือนความผันผวนสูง (Choppy Trend): ขอนไพ่สลับไปมาไร้ทิศทาง ระบบกรองสัญญาณหลอก (Anti-False-Positive) ได้สั่งระงับการลงทุนเพื่อความปลอดภัย",
         "analytics_title": "💰 สถานะการเงินและเป้าหมาย",
         "metric_capital": "เงินทุนปัจจุบัน",
         "metric_pl": "กำไร/ขาดทุนรวม",
@@ -189,7 +202,7 @@ translations = {
         "if_blue": "สมมติว่าตาถัดไปออก 🔵 BLUE",
         "if_tie": "สมมติว่าตาถัดไปออก 🟢 TIE",
         "confirmed_status": "ผ่านเกณฑ์ลงทุน (4:1)",
-        "wait_status": "รอจังหวะ (เสียงแตก)",
+        "wait_status": "รอจังหวะ (เสียงแตก/ผันผวน)",
         "algo_intensity_header": "⚡ ระดับความเข้มข้นและค่าความแม่นยำของอัลกอริทึม",
         "algo_1_name": "1. Deep Monte Carlo",
         "algo_1_desc": "คำนวณน้ำหนักความน่าจะเป็นจากขอนไพ่ที่เหลือด้วยการสุ่มซ้ำความละเอียดสูง ความแม่นยำโดยประมาณ: ~88%",
@@ -203,11 +216,11 @@ translations = {
         "algo_5_desc": "ระบบจับคู่รูปแบบประวัติศาสตร์เชิงลึกค้นหาชุดข้อมูลซ้ำซ้อน ความแม่นยำโดยประมาณ: ~89%",
         "algo_1": "1. Deep MC", "algo_2": "2. 2-Step HMM", "algo_3": "3. Pro Bayesian", "algo_4": "4. EMA Momentum", "algo_5": "5. N-Gram Pattern",
         "intensified": "วิเคราะห์เข้มข้นสูง",
-        "rec_title": "🎯 กลยุทธ์การลงทุนตาถัดไป (กฎเสียงข้างมาก 4:1):",
+        "rec_title": "🎯 กลยุทธ์การลงทุนตาถัดไป (กฎเสียงข้างมาก 4:1 + ตัวกรองสัญญาณหลอก):",
         "conf_level": "📊 ระดับความมั่นใจของระบบ",
         "algo_aligned": "อัลกอริทึมเห็นตรงกัน",
         "pass_msg": "✅ สัญญาณลงทุนผ่านเกณฑ์! แนะนำให้ลงทุนฝั่ง: 【",
-        "fail_msg": "⛔ ห้ามลงทุน / รอจังหวะ: สัญญาณไม่ชัดเจน รักษาวินัยและเงินทุนของคุณไว้!",
+        "fail_msg": "⛔ ห้ามลงทุน / รอจังหวะ: สัญญาณไม่ชัดเจนหรือตลาดผันผวนสูง รักษาวินัยและเงินทุนไว้!",
         "pred_stake": "💡 พยากรณ์ขนาดเงินเดิมพันตาถัดไป:",
         "wait_stake": "0 (รอจังหวะ)",
         "reset": "🗑️ ล้างข้อมูลและเริ่มขอนใหม่",
@@ -325,13 +338,11 @@ if processed_rounds:
     winners_list = [r["winner"] for r in processed_rounds]
     last_w = winners_list[-1]
     
-    # นับ Streak (มังกร)
     streak_count = 0
     for w in reversed(winners_list):
         if w == last_w: streak_count += 1
         else: break
 
-    # นับ Ping-Pong (ปิงปองสลับ)
     pp_count = 0
     if len(winners_list) >= 2:
         for i in range(len(winners_list)-1, 0, -1):
@@ -351,6 +362,19 @@ if processed_rounds:
     st.markdown(f'<div class="pattern-box">{pattern_text}</div>', unsafe_allow_html=True)
 else:
     st.info(t["no_data"])
+
+# --- ฟังก์ชันตรวจสอบความผันผวนสูง (Anti-False-Positive Volatility Filter) ---
+def check_market_volatility(rounds_history):
+    if len(rounds_history) < 6:
+        return False
+    recent = [r["winner"] for r in rounds_history[-10:] if r["winner"] in ["Red", "Blue"]]
+    if len(recent) < 4:
+        return False
+    changes = sum(1 for i in range(len(recent) - 1) if recent[i] != recent[i+1])
+    # ถ้าเปลี่ยนฝั่งมากกว่าหรือเท่ากับ 60% ของตาทั้งหมด ถือว่าตลาดสลับไปมาผันผวนสูง (Choppy)
+    if (changes / (len(recent) - 1)) >= 0.6:
+        return True
+    return False
 
 # --- INTENSIFIED 5-ALGORITHM ENGINE WITH DEEP PROFILES ---
 def run_intensified_algorithms(rounds_history, game_mode, num_sims):
@@ -415,6 +439,11 @@ if len(processed_rounds) >= 5:
     max_votes = max(red_count, blue_count)
     confidence_pct = (max_votes / 5) * 100
 
+    # ตรวจสอบความผันผวนสูง (Choppy Trend Guard)
+    is_volatile = check_market_volatility(processed_rounds)
+    if is_volatile:
+        st.markdown(f'<div class="volatility-box">{t["volatility_warning"]}</div>', unsafe_allow_html=True)
+
     # แสดงรายละเอียดความเข้มข้นและความแม่นยำของแต่ละอัลกอริทึม
     st.markdown(f"#### {t['algo_intensity_header']}")
     col_desc1, col_desc2, col_desc3, col_desc4, col_desc5 = st.columns(5)
@@ -434,8 +463,10 @@ if len(processed_rounds) >= 5:
             unsafe_allow_html=True,
         )
 
-    # คำนวณ Stake Sizing พยากรณ์เงินตาต่อไป
-    if confidence_pct == 100:
+    # คำนวณ Stake Sizing พยากรณ์เงินตาต่อไป (ถ้าตลาดผันผวน บังคับ Stake เป็น 0)
+    if is_volatile:
+        suggested_stake = 0.0
+    elif confidence_pct == 100:
         suggested_stake = base_bet * 2.0
     elif confidence_pct == 80:
         suggested_stake = base_bet * 1.0
@@ -447,12 +478,13 @@ if len(processed_rounds) >= 5:
 
     stake_str = f"{suggested_stake:,.0f}" if suggested_stake > 0 else t["wait_stake"]
 
-    if red_count >= 4:
+    # เงื่อนไขผ่านเกณฑ์ 4:1 และต้องไม่ผันผวนสูง
+    if not is_volatile and red_count >= 4:
         st.markdown(
             f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red】<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>',
             unsafe_allow_html=True,
         )
-    elif blue_count >= 4:
+    elif not is_volatile and blue_count >= 4:
         st.markdown(
             f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue】<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>',
             unsafe_allow_html=True,
@@ -478,14 +510,13 @@ if len(processed_rounds) >= 5:
         s_max = max(s_red, s_blue)
         s_conf = (s_max / 5) * 100
         s_favored = "Red" if s_red >= s_blue else "Blue"
-        s_passed = s_max >= 4
+        s_passed = s_max >= 4 and not check_market_volatility(temp_history)
         
         sim_pl_impact = base_bet if s_favored == hyp else -base_bet
         if hyp == "Tie": sim_pl_impact = 0.0
 
         scenarios[hyp] = {"favored": s_favored, "conf": s_conf, "passed": s_passed, "impact": sim_pl_impact}
 
-    # แก้ไขแยกตัวแปรสีและข้อความเพื่อหลีกเลี่ยง SyntaxError ภายใน f-string
     for hyp_key, col_obj, title_text in [("Red", sim_col1, t["if_red"]), ("Blue", sim_col2, t["if_blue"]), ("Tie", sim_col3, t["if_tie"])]:
         scen = scenarios[hyp_key]
         c_status = t["confirmed_status"] if scen["passed"] else t["wait_status"]
