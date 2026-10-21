@@ -168,7 +168,7 @@ translations = {
         "max_loss": "จุดตัดขาดทุนสูงสุด",
         "base_bet": "เงินเดิมพันขั้นต่ำ",
         "grid_title": "1️⃣ ตารางบันทึกผลและกำไร/ขาดทุน (50 รอบ)",
-        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริง (ได้เสียเป็นบาท) ที่ช่อง `My P/L` จากนั้นกด Confirm",
+        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริง (ได้เสียเป็นบาท) ที่ช่อง My P/L จากนั้นกด Confirm",
         "confirm_btn": "✅ ยืนยันข้อมูลและเริ่มวิเคราะห์",
         "confirm_success": "✅ ยืนยันข้อมูลสำเร็จ! ระบบพร้อมวิเคราะห์แล้ว",
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และตัววิเคราะห์เค้าไพ่",
@@ -460,7 +460,7 @@ if len(processed_rounds) >= 5:
     else:
         st.markdown(f'<div class="big-badge consensus-fail">{t["fail_msg"]}<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>', unsafe_allow_html=True)
 
-    # --- What-If Scenario Matrix (เมทริกซ์จำลองสถานการณ์ล่วงหน้าและการเดินเงิน) ---
+    # --- What-If Scenario Matrix (เมทริกซ์จำลองสถานการณ์และการเดินเงิน) ---
     st.markdown("---")
     st.markdown(f"### {t['sim_title']}")
     st.markdown(t["sim_desc"])
@@ -472,7 +472,6 @@ if len(processed_rounds) >= 5:
         temp_history = processed_rounds.copy()
         temp_history.append({"round": len(temp_history) + 1, "winner": hyp, "pl": base_bet if hyp=="Red" else -base_bet})
         
-        # คำนวณผลกำไรสมมติ หากตานี้แทงฝั่งที่ระบบแนะนำแล้วผลออกตามสมมติฐาน
         sim_votes = run_intensified_algorithms(temp_history, game_mode, num_sims)
         s_red = sim_votes.count("Red")
         s_blue = sim_votes.count("Blue")
@@ -481,24 +480,27 @@ if len(processed_rounds) >= 5:
         s_favored = "Red" if s_red >= s_blue else "Blue"
         s_passed = s_max >= 4
         
-        # จำลอง P/L สมมติสำหรับตาถัดไป
         sim_pl_impact = base_bet if s_favored == hyp else -base_bet
         if hyp == "Tie": sim_pl_impact = 0.0
 
         scenarios[hyp] = {"favored": s_favored, "conf": s_conf, "passed": s_passed, "impact": sim_pl_impact}
 
-    with sim_col1:
-        c_status = t["confirmed_status"] if scenarios["Red"]["passed"] else t["wait_status"]
-        pl_color = "#10b981" if scenarios["Red"]["impact"] >= 0 else "#ef4444"
-        st.markdown(f'<div class="sim-box"><b>{t["if_red"]}</b><br>Next Favored: <span style="color:{"#ef4444" if scenarios["Red"]["favored"]=="Red" else "#3b82f6"}">{scenarios["Red"]["favored"]}</span><br>Confidence: {scenarios["Red"]["conf']:.0f}%<br>Status: <b>{c_status}</b><br>Simulated P/L: <span style="color:{pl_color}; font-weight:bold;">{scenarios["Red"]["impact"]:+,.0f} ฿</span></div>', unsafe_allow_html=True)
-    with sim_col2:
-        c_status = t["confirmed_status"] if scenarios["Blue"]["passed"] else t["wait_status"]
-        pl_color = "#10b981" if scenarios["Blue"]["impact"] >= 0 else "#ef4444"
-        st.markdown(f'<div class="sim-box"><b>{t["if_blue"]}</b><br>Next Favored: <span style="color:{"#ef4444" if scenarios["Blue"]["favored"]=="Red" else "#3b82f6"}">{scenarios["Blue"]["favored"]}</span><br>Confidence: {scenarios["Blue"]["conf']:.0f}%<br>Status: <b>{c_status}</b><br>Simulated P/L: <span style="color:{pl_color}; font-weight:bold;">{scenarios["Blue"]["impact"]:+,.0f} ฿</span></div>', unsafe_allow_html=True)
-    with sim_col3:
-        c_status = t["confirmed_status"] if scenarios["Tie"]["passed"] else t["wait_status"]
-        pl_color = "#10b981" if scenarios["Tie"]["impact"] >= 0 else "#ef4444"
-        st.markdown(f'<div class="sim-box"><b>{t["if_tie"]}</b><br>Next Favored: <span style="color:{"#ef4444" if scenarios["Tie"]["favored"]=="Red" else "#3b82f6"}">{scenarios["Tie"]["favored"]}</span><br>Confidence: {scenarios["Tie"]["conf']:.0f}%<br>Status: <b>{c_status}</b><br>Simulated P/L: <span style="color:{pl_color}; font-weight:bold;">{scenarios["Tie"]["impact"]:+,.0f} ฿</span></div>', unsafe_allow_html=True)
+    # แก้ไขแยกตัวแปรสีและข้อความเพื่อหลีกเลี่ยง SyntaxError ภายใน f-string
+    for hyp_key, col_obj, title_text in [("Red", sim_col1, t["if_red"]), ("Blue", sim_col2, t["if_blue"]), ("Tie", sim_col3, t["if_tie"])]:
+        scen = scenarios[hyp_key]
+        c_status = t["confirmed_status"] if scen["passed"] else t["wait_status"]
+        fav_color = "#ef4444" if scen["favored"] == "Red" else "#3b82f6"
+        pl_color = "#10b981" if scen["impact"] >= 0 else "#ef4444"
+        
+        with col_obj:
+            st.markdown(
+                f'<div class="sim-box"><b>{title_text}</b><br>'
+                f'Next Favored: <span style="color:{fav_color}">{scen["favored"]}</span><br>'
+                f'Confidence: {scen["conf"]:.0f}%<br>'
+                f'Status: <b>{c_status}</b><br>'
+                f'Simulated P/L: <span style="color:{pl_color}; font-weight:bold;">{scen["impact"]:+,.0f} ฿</span></div>',
+                unsafe_allow_html=True
+            )
 
 else:
     st.info(t["need_more_data"])
