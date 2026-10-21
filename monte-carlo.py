@@ -80,43 +80,75 @@ translations = {
         "title": "🃏 ADVANCED 5-ALGORITHM PRO PREDICTOR",
         "subtitle": "Intensified AI with Bankroll Management, Profit Targets & Dynamic Stake Sizing.",
         "bankroll_title": "💰 Bankroll & Risk Management",
-        "init_fund": "Initial Capital / Bankroll (฿)",
-        "target_profit": "Daily Profit Goal (฿)",
-        "max_loss": "Max Stop-Loss Limit (฿)",
-        "base_bet": "Base Unit Bet Size (฿)",
+        "init_fund": "Initial Capital",
+        "target_profit": "Daily Profit Goal",
+        "max_loss": "Max Stop-Loss Limit",
+        "base_bet": "Base Unit Bet Size",
         "grid_title": "1️⃣ Historical Data & P/L Entry (50 Rounds)",
         "grid_desc": "💡 Fill out the round outcomes and your actual Profit/Loss. Click **Confirm Data** to analyze.",
         "confirm_btn": "✅ Confirm Grid Data & Analyze",
+        "confirm_success": "✅ Data Confirmed! Ready for analysis.",
         "roadmap_title": "2️⃣ Roadmap & Analytics",
+        "analytics_title": "💰 Bankroll & Profit Analytics",
+        "metric_capital": "Current Capital",
+        "metric_pl": "Total Profit/Loss",
+        "metric_target": "Daily Target",
+        "metric_stoploss": "Max Stop-Loss",
+        "of_target": "of Target",
+        "target_hit": "🎉 TARGET REACHED: You've hit your daily goal! Stop and enjoy your profits. (Stop Gain)",
+        "stop_loss_hit": "⚠️ STOP-LOSS REACHED: You've hit your max loss limit! Stop immediately to protect your bankroll. (Stop Loss)",
         "pred_title": "3️⃣ Intensive 5-Algorithm Voting & Stake Sizing",
+        "algo_1": "1. Deep MC", "algo_2": "2. 2-Step HMM", "algo_3": "3. Pro Bayesian", "algo_4": "4. EMA Momentum", "algo_5": "5. N-Gram Pattern",
+        "intensified": "INTENSIFIED",
         "rec_title": "🎯 Actionable Strategy (4:1 Majority Rule):",
+        "conf_level": "📊 Dashboard Confidence Level",
+        "algo_aligned": "Algorithms Aligned",
         "pass_msg": "✅ INVEST SIGNAL CONFIRMED! Target Side: 【",
         "fail_msg": "⛔ WAIT / DO NOT INVEST: Algorithms split. Preserve your bankroll!",
+        "pred_stake": "💡 Predicted Stake Size for Next Round:",
+        "wait_stake": "0 (WAIT)",
         "reset": "🗑️ Reset Data & Clear History",
         "mode": "Game Scoring Mode:",
         "sims": "Monte Carlo Intensity",
-        "no_data": "Please enter round outcomes and click **Confirm Grid Data** to start analytics."
+        "no_data": "No data available. Please confirm your grid data.",
+        "need_more_data": "Please enter and confirm at least 5 rounds to unlock advanced predictions."
     },
     "ไทย": {
-        "title": "🃏 แดชบอร์ดพยากรณ์ขั้นสูง 5 อัลกอริทึม (PRO LEVEL)",
+        "title": "🃏 แดชบอร์ดพยากรณ์ขั้นสูง 5 อัลกอริทึม",
         "subtitle": "ระบบวิเคราะห์เข้มข้น พร้อมคำนวณเงินทุน กำไร เป้าหมายรายวัน และพยากรณ์เงินเดิมพัน",
-        "bankroll_title": "💰 ตั้งค่าเงินทุนและเป้าหมาย (Bankroll)",
-        "init_fund": "เงินทุนเริ่มต้น (Initial Capital)",
-        "target_profit": "เป้าหมายกำไรต่อวัน (Daily Goal)",
-        "max_loss": "จุดตัดขาดทุนสูงสุด (Stop-Loss)",
-        "base_bet": "เงินเดิมพันขั้นต่ำ (Base Bet)",
+        "bankroll_title": "💰 ตั้งค่าเงินทุนและเป้าหมาย",
+        "init_fund": "เงินทุนเริ่มต้น",
+        "target_profit": "เป้าหมายกำไรต่อวัน",
+        "max_loss": "จุดตัดขาดทุนสูงสุด",
+        "base_bet": "เงินเดิมพันขั้นต่ำ",
         "grid_title": "1️⃣ ตารางบันทึกผลและกำไร/ขาดทุน (50 รอบ)",
-        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริงที่ช่อง `My P/L` จากนั้นกด **Confirm**",
-        "confirm_btn": "✅ Confirm ข้อมูลและเริ่มวิเคราะห์",
+        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริงที่ช่อง My P/L จากนั้นกด Confirm",
+        "confirm_btn": "✅ ยืนยันข้อมูลและเริ่มวิเคราะห์",
+        "confirm_success": "✅ ยืนยันข้อมูลสำเร็จ! ระบบพร้อมวิเคราะห์แล้ว",
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์ย้อนหลัง",
-        "pred_title": "3️⃣ ผลลงมติ 5 อัลกอริทึมเข้มข้น & คำนวณเงินเดิมพันตาต่อไป",
+        "analytics_title": "💰 สถานะการเงินและเป้าหมาย",
+        "metric_capital": "เงินทุนปัจจุบัน",
+        "metric_pl": "กำไร/ขาดทุนรวม",
+        "metric_target": "เป้าหมายกำไร",
+        "metric_stoploss": "จุดตัดขาดทุน",
+        "of_target": "ของเป้าหมาย",
+        "target_hit": "🎉 ถึงเป้าหมายแล้ว: คุณทำกำไรถึงเป้าหมายรายวัน แนะนำให้หยุดพักและถอนกำไรออก!",
+        "stop_loss_hit": "⚠️ ตัดขาดทุน: ขาดทุนถึงจุดที่กำหนดไว้ แนะนำให้หยุดเล่นทันทีเพื่อป้องกันเงินทุนสูญหาย!",
+        "pred_title": "3️⃣ ผลลงมติ 5 อัลกอริทึมเข้มข้น & คำนวณเงินเดิมพัน",
+        "algo_1": "1. Deep MC", "algo_2": "2. 2-Step HMM", "algo_3": "3. Pro Bayesian", "algo_4": "4. EMA Momentum", "algo_5": "5. N-Gram Pattern",
+        "intensified": "วิเคราะห์เชิงลึก",
         "rec_title": "🎯 กลยุทธ์การลงทุนตาถัดไป (กฎเสียงข้างมาก 4:1):",
+        "conf_level": "📊 ระดับความมั่นใจของระบบ",
+        "algo_aligned": "อัลกอริทึมเห็นตรงกัน",
         "pass_msg": "✅ สัญญาณลงทุนผ่านเกณฑ์! แนะนำให้ลงทุนฝั่ง: 【",
         "fail_msg": "⛔ ห้ามลงทุน / รอจังหวะ: สัญญาณไม่ชัดเจน รักษาวินัยและเงินทุนของคุณไว้!",
+        "pred_stake": "💡 พยากรณ์ขนาดเงินเดิมพันตาถัดไป:",
+        "wait_stake": "0 (รอจังหวะ)",
         "reset": "🗑️ ล้างข้อมูลและเริ่มขอนใหม่",
         "mode": "รูปแบบการคิดแต้ม:",
-        "sims": "ความเข้มข้นของตัวจำลอง (Iterations)",
-        "no_data": "กรุณากรอกผลการแข่งขันในตารางกริดแล้วกด **Confirm** เพื่อแสดงผลแดชบอร์ด"
+        "sims": "ความเข้มข้นของตัวจำลอง",
+        "no_data": "ยังไม่มีข้อมูล กรุณายืนยันข้อมูลในตารางกริด",
+        "need_more_data": "กรุณากรอกและยืนยันข้อมูลอย่างน้อย 5 ตาขึ้นไป เพื่อแสดงผลการวิเคราะห์ระดับสูง"
     },
 }
 
@@ -126,12 +158,12 @@ st.markdown(f"# {t['title']}")
 st.markdown(t["subtitle"])
 st.markdown("---")
 
-# Sidebar Bankroll Settings
+# Sidebar Bankroll Settings (Step = 1)
 st.sidebar.markdown(f"### {t['bankroll_title']}")
-initial_capital = st.sidebar.number_input(t["init_fund"], min_value=100, value=10000, step=500)
-profit_target = st.sidebar.number_input(t["target_profit"], min_value=50, value=2500, step=100)
-stop_loss = st.sidebar.number_input(t["max_loss"], min_value=50, value=2000, step=100)
-base_bet = st.sidebar.number_input(t["base_bet"], min_value=10, value=100, step=10)
+initial_capital = st.sidebar.number_input(t["init_fund"], min_value=1, value=10000, step=1)
+profit_target = st.sidebar.number_input(t["target_profit"], min_value=1, value=2500, step=1)
+stop_loss = st.sidebar.number_input(t["max_loss"], min_value=1, value=2000, step=1)
+base_bet = st.sidebar.number_input(t["base_bet"], min_value=1, value=100, step=1)
 
 if "grid_history" not in st.session_state:
     initial_data = []
@@ -141,7 +173,7 @@ if "grid_history" not in st.session_state:
             "Red Winner": False,
             "Blue Winner": False,
             "Tie (Draw)": False,
-            "My P/L (฿)": 0.0,
+            "My P/L": 0.0,
             "Notes": "",
         })
     st.session_state.grid_history = pd.DataFrame(initial_data)
@@ -158,7 +190,7 @@ if st.sidebar.button(t["reset"], use_container_width=True):
     reset_data = []
     for i in range(1, 51):
         reset_data.append({
-            "Round": i, "Red Winner": False, "Blue Winner": False, "Tie (Draw)": False, "My P/L (฿)": 0.0, "Notes": ""
+            "Round": i, "Red Winner": False, "Blue Winner": False, "Tie (Draw)": False, "My P/L": 0.0, "Notes": ""
         })
     st.session_state.grid_history = pd.DataFrame(reset_data)
     st.session_state.confirmed_data = pd.DataFrame()
@@ -177,7 +209,7 @@ edited_grid_df = st.data_editor(
 if st.button(t["confirm_btn"], type="primary", use_container_width=True):
     st.session_state.grid_history = edited_grid_df
     st.session_state.confirmed_data = edited_grid_df.copy()
-    st.success("✅ Data Confirmed / ข้อมูลอัปเดตและพร้อมวิเคราะห์แล้ว")
+    st.success(t["confirm_success"])
 
 # ประมวลผลรอบที่ยืนยันแล้ว
 processed_rounds = []
@@ -185,7 +217,7 @@ total_pl = 0.0
 
 if not st.session_state.confirmed_data.empty:
     for idx, row in st.session_state.confirmed_data.iterrows():
-        pl = float(row.get("My P/L (฿)", 0.0))
+        pl = float(row.get("My P/L", 0.0))
         total_pl += pl
         
         winner = None
@@ -200,18 +232,18 @@ current_capital = initial_capital + total_pl
 profit_progress = min(100.0, max(0.0, (total_pl / profit_target) * 100)) if profit_target > 0 else 0
 
 st.markdown("---")
-st.markdown("### 💰 Bankroll & Profit Analytics (การเงินและเป้าหมาย)")
+st.markdown(f"### {t['analytics_title']}")
 b1, b2, b3, b4 = st.columns(4)
-b1.metric("Current Capital (เงินทุนปัจจุบัน)", f"{current_capital:,.2f} ฿", f"Init: {initial_capital:,.0f} ฿")
-b2.metric("Total Profit/Loss (กำไร/ขาดทุนรวม)", f"{total_pl:+,.2f} ฿", f"{profit_progress:.1f}% of Target")
-b3.metric("Daily Target (เป้าหมายกำไร)", f"{profit_target:,.2f} ฿")
-b4.metric("Max Stop-Loss (จุดตัดขาดทุน)", f"-{stop_loss:,.2f} ฿")
+b1.metric(t["metric_capital"], f"{current_capital:,.2f}", f"{initial_capital:,.0f}")
+b2.metric(t["metric_pl"], f"{total_pl:+,.2f}", f"{profit_progress:.1f}% {t['of_target']}")
+b3.metric(t["metric_target"], f"{profit_target:,.2f}")
+b4.metric(t["metric_stoploss"], f"-{stop_loss:,.2f}")
 
 # ตรวจสอบจุดเป้าหมายและขาดทุน
 if total_pl >= profit_target:
-    st.markdown('<div class="target-hit">🎉 TARGET REACHED: คุณทำกำไรถึงเป้าหมายรายวันแล้ว ควรหยุดพักและถอนกำไรออก! (Stop Gain)</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="target-hit">{t["target_hit"]}</div>', unsafe_allow_html=True)
 elif total_pl <= -stop_loss:
-    st.markdown('<div class="stop-loss-hit">⚠️ STOP-LOSS REACHED: ขาดทุนถึงจุดที่กำหนดไว้ แนะนำให้หยุดเล่นทันทีเพื่อป้องกันเงินทุนสูญหาย! (Stop Loss)</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="stop-loss-hit">{t["stop_loss_hit"]}</div>', unsafe_allow_html=True)
 
 st.markdown("---")
 st.markdown(f"### {t['roadmap_title']}")
@@ -227,9 +259,8 @@ else:
 
 # --- INTENSIFIED 5-ALGORITHM ENGINE ---
 def run_intensified_algorithms(rounds_history, game_mode, num_sims):
-    # 1. Deep Monte Carlo (Using Remaining Shoe Weights)
+    # 1. Deep Monte Carlo
     sim_red, sim_blue = 0, 0
-    # Simulate weighting effect (In real code, calculates exact deck composition)
     r_weight, b_weight = 0.505, 0.495 
     for _ in range(num_sims):
         res = random.choices(["Red", "Blue"], weights=[r_weight, b_weight], k=1)[0]
@@ -237,7 +268,7 @@ def run_intensified_algorithms(rounds_history, game_mode, num_sims):
         else: sim_blue += 1
     vote_mc = "Red" if sim_red >= sim_blue else "Blue"
 
-    # 2. 2-Step HMM (Higher Order Markov Transition)
+    # 2. 2-Step HMM
     vote_hmm = "Red"
     if len(rounds_history) >= 3:
         last_two = (rounds_history[-2]["winner"], rounds_history[-1]["winner"])
@@ -256,7 +287,7 @@ def run_intensified_algorithms(rounds_history, game_mode, num_sims):
         b_weighted = sum(1.5 if r["winner"] == "Blue" else 0.5 for r in recent)
         vote_bayes = "Red" if r_weighted >= b_weighted else "Blue"
 
-    # 4. EMA Momentum Trend (Decaying Weights)
+    # 4. EMA Momentum Trend
     vote_trend = "Red"
     if len(rounds_history) > 0:
         ema_red, ema_blue = 0.0, 0.0
@@ -264,10 +295,10 @@ def run_intensified_algorithms(rounds_history, game_mode, num_sims):
         for r in reversed(rounds_history[-15:]):
             if r["winner"] == "Red": ema_red += decay
             elif r["winner"] == "Blue": ema_blue += decay
-            decay *= 0.85 # ให้น้ำหนักตาล่าสุดมากที่สุด
+            decay *= 0.85
         vote_trend = "Red" if ema_red >= ema_blue else "Blue"
 
-    # 5. N-Gram Pattern Matching (Deep Pattern)
+    # 5. N-Gram Pattern Matching
     vote_pattern = "Red"
     if len(rounds_history) >= 5:
         pattern_key = [r["winner"] for r in rounds_history[-4:]]
@@ -279,7 +310,7 @@ def run_intensified_algorithms(rounds_history, game_mode, num_sims):
                 else: p_score_b += 3
         if p_score_r > p_score_b: vote_pattern = "Red"
         elif p_score_b > p_score_r: vote_pattern = "Blue"
-        else: vote_pattern = rounds_history[-1]["winner"] # Fallback
+        else: vote_pattern = rounds_history[-1]["winner"]
 
     return [vote_mc, vote_hmm, vote_bayes, vote_trend, vote_pattern]
 
@@ -295,37 +326,39 @@ if len(processed_rounds) >= 5:
     confidence_pct = (max_votes / 5) * 100
 
     col1, col2, col3, col4, col5 = st.columns(5)
-    algo_names = ["1. Deep MC", "2. 2-Step HMM", "3. Pro Bayesian", "4. EMA Momentum", "5. N-Gram Pattern"]
+    algo_names = [t["algo_1"], t["algo_2"], t["algo_3"], t["algo_4"], t["algo_5"]]
     
     for idx, (col, v, name) in enumerate(zip([col1, col2, col3, col4, col5], votes, algo_names)):
         status_color = "#ef4444" if v == "Red" else "#3b82f6"
         col.markdown(
-            f'<div class="metric-card"><h4>{name}</h4><h3 style="color: {status_color};">{v}</h3><p style="font-size: 11px; color: #94a3b8;">INTENSIFIED</p></div>',
+            f'<div class="metric-card"><h4>{name}</h4><h3 style="color: {status_color};">{v}</h3><p style="font-size: 11px; color: #94a3b8;">{t["intensified"]}</p></div>',
             unsafe_allow_html=True,
         )
 
     # คำนวณ Stake Sizing พยากรณ์เงินตาต่อไป
     if confidence_pct == 100:
-        suggested_stake = base_bet * 2.0  # มั่นใจสุด ขยายเงินทุน 2 เท่า (Aggressive)
+        suggested_stake = base_bet * 2.0
     elif confidence_pct == 80:
-        suggested_stake = base_bet * 1.0  # มั่นใจมาตรฐาน ลงตาม Base Bet (Standard)
+        suggested_stake = base_bet * 1.0
     else:
-        suggested_stake = 0.0  # ไม่มั่นใจ สั่งห้ามลง
+        suggested_stake = 0.0
 
     st.markdown(f"#### {t['rec_title']}")
-    st.markdown(f"### 📊 Dashboard Confidence Level: **{confidence_pct:.0f}%** ({max_votes}/5 Algorithms Aligned)")
+    st.markdown(f"### {t['conf_level']}: **{confidence_pct:.0f}%** ({max_votes}/5 {t['algo_aligned']})")
+
+    stake_str = f"{suggested_stake:,.0f}" if suggested_stake > 0 else t["wait_stake"]
 
     if red_count >= 4:
         st.markdown(
-            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red Side】<br><br>💡 พยากรณ์ขนาดเงินเดิมพันตาถัดไป (Stake Size): <b>{suggested_stake:,.0f} ฿</b></div>',
+            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red】<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>',
             unsafe_allow_html=True,
         )
     elif blue_count >= 4:
         st.markdown(
-            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue Side】<br><br>💡 พยากรณ์ขนาดเงินเดิมพันตาถัดไป (Stake Size): <b>{suggested_stake:,.0f} ฿</b></div>',
+            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue】<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>',
             unsafe_allow_html=True,
         )
     else:
-        st.markdown(f'<div class="big-badge consensus-fail">{t["fail_msg"]} (Red: {red_count} / Blue: {blue_count})<br><br>💡 พยากรณ์ขนาดเงินเดิมพันตาถัดไป (Stake Size): <b>0 ฿ (WAIT)</b></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="big-badge consensus-fail">{t["fail_msg"]}<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>', unsafe_allow_html=True)
 else:
-    st.info("กรุณากรอกข้อมูลในตารางกริดและกดปุ่ม **Confirm** อย่างน้อย 5 ตาขึ้นไป เพื่อแสดงผลการวิเคราะห์ระดับสูง")
+    st.info(t["need_more_data"])
