@@ -4,9 +4,7 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="5-Algorithm Majority Predictor Dashboard",
-    page_icon="🃏",
-    layout="wide",
+    page_title="Pro Card Shoe Predictor Dashboard", page_icon="🃏", layout="wide"
 )
 
 # Professional Modern Blue & Sky Blue Gradient Theme Styling
@@ -71,8 +69,9 @@ translations = {
     "English": {
         "title": "🃏 5-ALGORITHM MAJORITY PREDICTOR DASHBOARD",
         "subtitle": (
-            "4:1 Voting System Dashboard: **Monte Carlo**, **HMM**,"
-            " **Bayesian**, **Momentum Trend**, and **Pattern Matching**."
+            "4:1 Voting System Dashboard with Popup Alerts: **Monte Carlo**,"
+            " **HMM**, **Bayesian**, **Momentum Trend**, and **Pattern"
+            " Matching**."
         ),
         "grid_title": "1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)",
         "grid_desc": (
@@ -81,7 +80,7 @@ translations = {
         ),
         "roadmap_title": "2️⃣ Roadmap & Last 30-Round Analytics",
         "pred_title": (
-            "3️⃣ Dashboard: 5-Algorithm Majority Voting & Confidence Status"
+            "3️⃣ Dashboard: 5-Algorithm Majority Voting & Popup Alert"
         ),
         "rec_title": "🎯 Dashboard Consensus Status (4:1 Majority Rule):",
         "pass_msg": (
@@ -107,12 +106,18 @@ translations = {
             "Please enter round outcomes in the grid table above to start"
             " dashboard analytics."
         ),
+        "popup_title": "🚀 INVESTMENT SIGNAL CONFIRMED!",
+        "popup_text": (
+            "All algorithms aligned at {pct}% confidence. Recommended side:"
+            " **{side}**"
+        ),
     },
     "ไทย": {
         "title": "🃏 แดชบอร์ดพยากรณ์เสียงข้างมาก 5 อัลกอริทึม (4:1 MAJORITY)",
         "subtitle": (
-            "แดชบอร์ดแสดงผลการลงมติ 4:1: **Monte Carlo**, **HMM**,"
-            " **Bayesian**, **Momentum Trend**, และ **Pattern Matching**"
+            "แดชบอร์ดแสดงผลการลงมติพร้อมระบบ Popup เด้งเตือน: **Monte Carlo**,"
+            " **HMM**, **Bayesian**, **Momentum Trend**, และ **Pattern"
+            " Matching**"
         ),
         "grid_title": "1️⃣ ตารางกริดบันทึกข้อมูลย้อนหลัง (50 รอบ)",
         "grid_desc": (
@@ -121,7 +126,7 @@ translations = {
         ),
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์ 30 ตาล่าสุด",
         "pred_title": (
-            "3️⃣ แดชบอร์ดแสดงผล: การลงมติ 5 อัลกอริทึม & เปอร์เซ็นต์ความมั่นใจ"
+            "3️⃣ แดชบอร์ดแสดงผล: การลงมติ 5 อัลกอริทึม & ระบบ Popup แจ้งเตือน"
         ),
         "rec_title": "🎯 สถานะการตัดสินใจบนแดชบอร์ด (กฎเสียงข้างมาก 4:1):",
         "pass_msg": (
@@ -142,7 +147,12 @@ translations = {
         "blue_wins": "น้ำเงินชนะ",
         "ties": "เสมอ",
         "no_data": (
-            "กรุณากรอกผลการแข่งขันในตารางกริดด้านบน เพื่อแสดงผลแดชบอร์ดวิเคราะห์"
+            "กรุณากรอกผลการแข่งขันในตารางกริดด้านบน เพื่อแสดงผลแผงควบคุมแดชบอร์ด"
+        ),
+        "popup_title": "🚀 สัญญาณลงทุนผ่านเกณฑ์ (CONFIRMED)!",
+        "popup_text": (
+            "คณะกรรมการอัลกอริทึมมีความเห็นพ้องต้องกันที่ระดับ {pct}% แนะนำลงทุนที่ฝั่ง:"
+            " **{side}**"
         ),
     },
 }
@@ -289,31 +299,79 @@ st.markdown(f"### {t['pred_title']}")
 
 if len(processed_rounds) >= 4:
     votes = run_5_algorithm_consensus(processed_rounds, game_mode, num_sims)
-    
+
     red_count = votes.count("Red")
     blue_count = votes.count("Blue")
     max_votes = max(red_count, blue_count)
-    confidence_pct = (max_votes / 5) * 100  # คำนวณเปอร์เซ็นต์ความเห็นพ้องต้องกัน (เช่น 5/5 = 100%, 4/5 = 80%)
+    confidence_pct = (max_votes / 5) * 100
 
     col1, col2, col3, col4, col5 = st.columns(5)
-    
-    # แสดงการ์ดผลโหวต พร้อมระบุสถานะว่า Confirm ฝั่งไหน
-    for idx, (col, v) in enumerate(zip([col1, col2, col3, col4, col5], votes)):
+
+    algo_names = [
+        "1. Monte Carlo",
+        "2. HMM",
+        "3. Bayesian",
+        "4. Momentum",
+        "5. Pattern",
+    ]
+    for idx, (col, v, name) in enumerate(
+        zip([col1, col2, col3, col4, col5], votes, algo_names)
+    ):
         status_color = "#f43f5e" if v == "Red" else "#0ea5e9"
         col.markdown(
-            f'<div class="metric-card"><h4>Algo {idx+1}</h4><h3 style="color: {status_color};">{v}</h3><p style="font-size: 11px; color: #38bdf8;">CONFIRMED</p></div>',
+            f'<div class="metric-card"><h4>{name}</h4><h3 style="color:'
+            f' {status_color};">{v}</h3><p style="font-size: 11px; color:'
+            ' #38bdf8;">CONFIRMED</p></div>',
             unsafe_allow_html=True,
         )
 
     st.markdown(f"#### {t['rec_title']}")
-    st.markdown(f"### 📊 Dashboard Confidence Level: **{confidence_pct:.0f}%** ({max_votes}/5 Algorithms Aligned)")
+    st.markdown(
+        f"### 📊 Dashboard Confidence Level: **{confidence_pct:.0f}%**"
+        f" ({max_votes}/5 Algorithms Aligned)"
+    )
 
-    # เช็คเงื่อนไขเกณฑ์ 4:1 (ต้องได้ 4 เสียงขึ้นไป)
+    # Streamlit Dialog Popup เมื่อผ่านเกณฑ์ 4:1
+    @st.dialog("🚨 Investment Alert & Signal Confirmed")
+    def show_popup_alert(side, pct):
+        st.success(
+            t["popup_text"].format(
+                pct=pct, side="Red Side" if side == "Red" else "Blue Side"
+            )
+        )
+        st.balloons()
+        if st.button("OK / Close"):
+            st.rerun()
+
     if red_count >= 4:
-        st.markdown(f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red Side】 (Confidence: {confidence_pct:.0f}%) 🎉</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red Side】'
+            f" (Confidence: {confidence_pct:.0f}%) 🎉</div>",
+            unsafe_allow_html=True,
+        )
+        # เรียกใช้งาน Popup ทันทีที่ผ่านเกณฑ์
+        if st.button(
+            "🔔 Show Popup Signal Alert", type="primary", use_container_width=True
+        ):
+            show_popup_alert("Red", confidence_pct)
     elif blue_count >= 4:
-        st.markdown(f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue Side】 (Confidence: {confidence_pct:.0f}%) 🎉</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue Side】'
+            f" (Confidence: {confidence_pct:.0f}%) 🎉</div>",
+            unsafe_allow_html=True,
+        )
+        if st.button(
+            "🔔 Show Popup Signal Alert", type="primary", use_container_width=True
+        ):
+            show_popup_alert("Blue", confidence_pct)
     else:
-        st.markdown(f'<div class="big-badge consensus-fail">{t["fail_msg"].format(pct=confidence_pct)} (Red: {red_count} / Blue: {blue_count})</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="big-badge consensus-fail">{t["fail_msg"]} (Red:'
+            f" {red_count} / Blue: {blue_count})</div>",
+            unsafe_allow_html=True,
+        )
 else:
-    st.info("กรุณากรอกข้อมูลย้อนหลังอย่างน้อย 4 ตาขึ้นไป เพื่อแสดงผลแผงควบคุมแดชบอร์ด (Dashboard) 5 อัลกอริทึม")
+    st.info(
+        "กรุณากรอกข้อมูลย้อนหลังอย่างน้อย 4 ตาขึ้นไป เพื่อแสดงผลแผงควบคุมแดชบอร์ด"
+        " 5 อัลกอริทึม"
+    )
