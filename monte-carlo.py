@@ -11,13 +11,10 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    /* Main Background: Gradient Deep Midnight Black & Navy Blue */
     .stApp {
         background: linear-gradient(135deg, #050b14 0%, #0a1128 50%, #172554 100%);
         color: #f8fafc;
     }
-    
-    /* Glassmorphism Metric Cards with Dark Blue-Black Tint */
     .metric-card {
         background: rgba(10, 17, 40, 0.85);
         backdrop-filter: blur(14px);
@@ -28,8 +25,6 @@ st.markdown(
         text-align: center;
         margin-bottom: 15px;
     }
-    
-    /* Vibrant Big Betting Recommendation Badges */
     .big-badge {
         font-size: 22px;
         font-weight: bold;
@@ -40,12 +35,8 @@ st.markdown(
         margin-bottom: 15px;
         box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.7);
     }
-    .red-win { background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%); color: white; border: 2px solid #ef4444; }
-    .blue-win { background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%); color: white; border: 2px solid #3b82f6; }
-    .tie-win { background: linear-gradient(135deg, #059669 0%, #064e3b 100%); color: white; border: 2px solid #10b981; }
-    .wait-signal { background: rgba(15, 23, 42, 0.95); color: #94a3b8; border: 2px solid rgba(51, 65, 85, 0.8); }
-    
-    /* Roadmap History Dots */
+    .consensus-pass { background: linear-gradient(135deg, #059669 0%, #064e3b 100%); color: white; border: 2px solid #10b981; }
+    .consensus-fail { background: rgba(15, 23, 42, 0.95); color: #94a3b8; border: 2px solid rgba(239, 68, 68, 0.6); }
     .history-dot {
         display: inline-block;
         width: 40px;
@@ -59,8 +50,6 @@ st.markdown(
         font-size: 14px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
-    
-    /* Sidebar Styling (Dark Navy & Black) */
     section[data-testid="stSidebar"] {
         background-color: #030712;
         border-right: 1px solid rgba(30, 58, 138, 0.4);
@@ -80,18 +69,17 @@ translations = {
     "English": {
         "title": "🃏 5-ALGORITHM MAJORITY PREDICTOR DASHBOARD",
         "subtitle": (
-            "4:1 Voting System Dashboard with Popup Alerts: **Monte Carlo**,"
-            " **HMM**, **Bayesian**, **Momentum Trend**, and **Pattern"
-            " Matching**."
+            "4:1 Voting System Dashboard with Confirm Button & Analytics Chart."
         ),
         "grid_title": "1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)",
         "grid_desc": (
-            "💡 **50-Round Grid Table:** Record historical outcomes to feed all 5"
-            " algorithms."
+            "💡 **50-Round Grid Table:** Record historical outcomes and click"
+            " **Confirm Data** below to process analytics."
         ),
+        "confirm_btn": "✅ Confirm Grid Data & Analyze",
         "roadmap_title": "2️⃣ Roadmap & Last 30-Round Analytics",
         "pred_title": (
-            "3️⃣ Dashboard: 5-Algorithm Majority Voting & Popup Alert"
+            "3️⃣ Dashboard: 5-Algorithm Majority Voting & Analytics Chart"
         ),
         "rec_title": "🎯 Dashboard Consensus Status (4:1 Majority Rule):",
         "pass_msg": (
@@ -114,31 +102,23 @@ translations = {
         "blue_wins": "Blue Wins",
         "ties": "Ties",
         "no_data": (
-            "Please enter round outcomes in the grid table above to start"
-            " dashboard analytics."
-        ),
-        "popup_title": "🚀 INVESTMENT SIGNAL CONFIRMED!",
-        "popup_text": (
-            "All algorithms aligned at {pct}% confidence. Recommended side:"
-            " **{side}**"
+            "Please enter round outcomes and click **Confirm Grid Data** to"
+            " start analytics."
         ),
     },
     "ไทย": {
         "title": "🃏 แดชบอร์ดพยากรณ์เสียงข้างมาก 5 อัลกอริทึม (4:1 MAJORITY)",
         "subtitle": (
-            "แดชบอร์ดแสดงผลการลงมติพร้อมระบบ Popup เด้งเตือน: **Monte Carlo**,"
-            " **HMM**, **Bayesian**, **Momentum Trend**, และ **Pattern"
-            " Matching**"
+            "แดชบอร์ดวิเคราะห์พร้อมปุ่ม Confirm ข้อมูลและกราฟรวมผลลัพธ์ของแต่ละอัลกอริทึม"
         ),
         "grid_title": "1️⃣ ตารางกริดบันทึกข้อมูลย้อนหลัง (50 รอบ)",
         "grid_desc": (
-            "💡 **ตารางกริด 50 รอบ:** บันทึกผลย้อนหลังเพื่อป้อนข้อมูลให้ทั้ง 5"
-            " อัลกอริทึมประมวลผลบนแดชบอร์ด"
+            "💡 **ตารางกริด 50 รอบ:** กรอกผลย้อนหลังแล้วกดปุ่ม **Confirm ข้อมูล**"
+            " ด้านล่างเพื่อเริ่มประมวลผล"
         ),
+        "confirm_btn": "✅ Confirm ข้อมูลตารางเพื่อเริ่มวิเคราะห์",
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์ 30 ตาล่าสุด",
-        "pred_title": (
-            "3️⃣ แดชบอร์ดแสดงผล: การลงมติ 5 อัลกอริทึม & ระบบ Popup แจ้งเตือน"
-        ),
+        "pred_title": "3️⃣ แดชบอร์ดแสดงผล: การลงมติ 5 อัลกอริทึม & กราฟวิเคราะห์รวม",
         "rec_title": "🎯 สถานะการตัดสินใจบนแดชบอร์ด (กฎเสียงข้างมาก 4:1):",
         "pass_msg": (
             "✅ ยืนยันสถานะ CONFIRM! ระดับความเห็นพ้อง: {pct}% (ผ่านเกณฑ์ 4:1"
@@ -158,12 +138,7 @@ translations = {
         "blue_wins": "น้ำเงินชนะ",
         "ties": "เสมอ",
         "no_data": (
-            "กรุณากรอกผลการแข่งขันในตารางกริดด้านบน เพื่อแสดงผลแผงควบคุมแดชบอร์ด"
-        ),
-        "popup_title": "🚀 สัญญาณลงทุนผ่านเกณฑ์ (CONFIRMED)!",
-        "popup_text": (
-            "คณะกรรมการอัลกอริทึมมีความเห็นพ้องต้องกันที่ระดับ {pct}% แนะนำลงทุนที่ฝั่ง:"
-            " **{side}**"
+            "กรุณากรอกผลการแข่งขันในตารางกริดแล้วกด **Confirm** เพื่อแสดงผลแดชบอร์ด"
         ),
     },
 }
@@ -186,6 +161,9 @@ if "grid_history" not in st.session_state:
         })
     st.session_state.grid_history = pd.DataFrame(initial_data)
 
+if "confirmed_rounds" not in st.session_state:
+    st.session_state.confirmed_rounds = []
+
 st.sidebar.markdown("### ⚙️ Simulation Parameters")
 game_mode = st.sidebar.radio(
     t["mode"], [t["mode_bacc"], t["mode_single"]]
@@ -206,6 +184,7 @@ if st.sidebar.button(t["reset"], use_container_width=True):
             "Notes / Card Ranks": "",
         })
     st.session_state.grid_history = pd.DataFrame(reset_data)
+    st.session_state.confirmed_rounds = []
     st.rerun()
 
 st.markdown(f"### {t['grid_title']}")
@@ -217,16 +196,26 @@ edited_grid_df = st.data_editor(
     use_container_width=True,
     key="grid_editor",
 )
-st.session_state.grid_history = edited_grid_df
 
-processed_rounds = []
-for idx, row in edited_grid_df.iterrows():
-    if row.get("Red Winner", False):
-        processed_rounds.append({"round": idx + 1, "winner": "Red"})
-    elif row.get("Blue Winner", False):
-        processed_rounds.append({"round": idx + 1, "winner": "Blue"})
-    elif row.get("Tie (Draw)", False):
-        processed_rounds.append({"round": idx + 1, "winner": "Tie"})
+# ปุ่ม Confirm เมื่อกรอกข้อมูลเสร็จแล้ว
+if st.button(t["confirm_btn"], type="primary", use_container_width=True):
+    st.session_state.grid_history = edited_grid_df
+    temp_rounds = []
+    for idx, row in edited_grid_df.iterrows():
+        if row.get("Red Winner", False):
+            temp_rounds.append({"round": idx + 1, "winner": "Red"})
+        elif row.get("Blue Winner", False):
+            temp_rounds.append({"round": idx + 1, "winner": "Blue"})
+        elif row.get("Tie (Draw)", False):
+            temp_rounds.append({"round": idx + 1, "winner": "Tie"})
+    st.session_state.confirmed_rounds = temp_rounds
+    st.success(
+        "Data confirmed successfully! Analytics and charts updated."
+        if lang == "English"
+        else "บันทึกและยืนยันข้อมูลสำเร็จ! อัปเดตการวิเคราะห์และกราฟแล้ว"
+    )
+
+processed_rounds = st.session_state.confirmed_rounds
 
 st.markdown("---")
 st.markdown(f"### {t['roadmap_title']}")
@@ -336,22 +325,24 @@ if len(processed_rounds) >= 4:
             unsafe_allow_html=True,
         )
 
+    # --- เพิ่มกราฟแสดงผลรวมการวิเคราะห์ของแต่ละอัลกอริทึม ---
+    st.markdown("#### 📊 Algorithm Consensus Analytics Chart")
+    chart_data = pd.DataFrame({
+        "Algorithm": algo_names,
+        "Vote Result": [1 if v == "Red" else 0 for v in votes],
+        "Side": votes,
+    })
+    # แสดง Bar Chart สรุปคะแนนโหวตแต่ละฝั่ง
+    vote_summary_df = pd.DataFrame(
+        {"Side": ["Red Side", "Blue Side"], "Votes": [red_count, blue_count]}
+    )
+    st.bar_chart(vote_summary_df.set_index("Side"), color="#3b82f6")
+
     st.markdown(f"#### {t['rec_title']}")
     st.markdown(
         f"### 📊 Dashboard Confidence Level: **{confidence_pct:.0f}%**"
         f" ({max_votes}/5 Algorithms Aligned)"
     )
-
-    @st.dialog("🚨 Investment Signal Confirmed")
-    def show_popup_alert(side, pct):
-        st.success(
-            t["popup_text"].format(
-                pct=pct, side="Red Side" if side == "Red" else "Blue Side"
-            )
-        )
-        st.balloons()
-        if st.button("OK / Close"):
-            st.rerun()
 
     if red_count >= 4:
         st.markdown(
@@ -359,20 +350,12 @@ if len(processed_rounds) >= 4:
             f" (Confidence: {confidence_pct:.0f}%) 🎉</div>",
             unsafe_allow_html=True,
         )
-        if st.button(
-            "🔔 Show Popup Signal Alert", type="primary", use_container_width=True
-        ):
-            show_popup_alert("Red", confidence_pct)
     elif blue_count >= 4:
         st.markdown(
             f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue Side】'
             f" (Confidence: {confidence_pct:.0f}%) 🎉</div>",
             unsafe_allow_html=True,
         )
-        if st.button(
-            "🔔 Show Popup Signal Alert", type="primary", use_container_width=True
-        ):
-            show_popup_alert("Blue", confidence_pct)
     else:
         st.markdown(
             f'<div class="big-badge consensus-fail">{t["fail_msg"]} (Red:'
@@ -381,6 +364,6 @@ if len(processed_rounds) >= 4:
         )
 else:
     st.info(
-        "กรุณากรอกข้อมูลย้อนหลังอย่างน้อย 4 ตาขึ้นไป เพื่อแสดงผลแผงควบคุมแดชบอร์ด"
-        " 5 อัลกอริทึม"
+        "กรุณากรอกข้อมูลในตารางกริดและกดปุ่ม **Confirm** อย่างน้อย 4 ตาขึ้นไป"
+        " เพื่อแสดงผลแดชบอร์ดและกราฟวิเคราะห์"
     )
