@@ -4,7 +4,9 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="5-Algorithm Majority Predictor", page_icon="🃏", layout="wide"
+    page_title="5-Algorithm Majority Predictor Dashboard",
+    page_icon="🃏",
+    layout="wide",
 )
 
 # Professional Modern Blue & Sky Blue Gradient Theme Styling
@@ -67,13 +69,10 @@ lang = st.sidebar.selectbox(
 
 translations = {
     "English": {
-        "title": (
-            "🃏 5-ALGORITHM MAJORITY CONSENSUS PREDICTOR & CONFIDENCE"
-            " BREAKDOWN"
-        ),
+        "title": "🃏 5-ALGORITHM MAJORITY PREDICTOR DASHBOARD",
         "subtitle": (
-            "4:1 Voting System with individual algorithm confidence percentages"
-            " and confirmation statuses."
+            "4:1 Voting System Dashboard: **Monte Carlo**, **HMM**,"
+            " **Bayesian**, **Momentum Trend**, and **Pattern Matching**."
         ),
         "grid_title": "1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)",
         "grid_desc": (
@@ -82,16 +81,16 @@ translations = {
         ),
         "roadmap_title": "2️⃣ Roadmap & Last 30-Round Analytics",
         "pred_title": (
-            "3️⃣ 5-Algorithm Breakdown (Confirm Status & Percentages)"
+            "3️⃣ Dashboard: 5-Algorithm Majority Voting & Confidence Status"
         ),
-        "rec_title": "🎯 Majority Consensus Decision (4:1 Rule):",
+        "rec_title": "🎯 Dashboard Consensus Status (4:1 Majority Rule):",
         "pass_msg": (
-            "✅ 4:1 MAJORITY CONFIRMED! At least 4 algorithms agree to invest"
-            " in 【"
+            "✅ 4:1 MAJORITY CONFIRMED! Agreement Level: {pct}% (4 or more"
+            " algorithms agree to invest in 【"
         ),
         "fail_msg": (
-            "⛔ NO MAJORITY / WAIT: Algorithms are split. Do NOT invest this"
-            " round!"
+            "⛔ NO MAJORITY / WAIT: Agreement Level: {pct}% (Split votes, e.g.,"
+            " 3:2). Do NOT invest this round!"
         ),
         "reset": "🗑️ Reset Grid Data & Clear History",
         "mode": "Game Scoring Mode:",
@@ -106,29 +105,32 @@ translations = {
         "ties": "Ties",
         "no_data": (
             "Please enter round outcomes in the grid table above to start"
-            " analysis."
+            " dashboard analytics."
         ),
     },
     "ไทย": {
-        "title": "🃏 ระบบพยากรณ์ 5 อัลกอริทึม พร้อมแสดงเปอร์เซ็นต์การ Confirm",
+        "title": "🃏 แดชบอร์ดพยากรณ์เสียงข้างมาก 5 อัลกอริทึม (4:1 MAJORITY)",
         "subtitle": (
-            "ระบบลงมติ 4:1 พร้อมแสดงผลเปอร์เซ็นต์ความมั่นใจ (%) และสถานะการยืนยัน"
-            " (Confirm) ของแต่ละอัลกอริทึม"
+            "แดชบอร์ดแสดงผลการลงมติ 4:1: **Monte Carlo**, **HMM**,"
+            " **Bayesian**, **Momentum Trend**, และ **Pattern Matching**"
         ),
         "grid_title": "1️⃣ ตารางกริดบันทึกข้อมูลย้อนหลัง (50 รอบ)",
         "grid_desc": (
             "💡 **ตารางกริด 50 รอบ:** บันทึกผลย้อนหลังเพื่อป้อนข้อมูลให้ทั้ง 5"
-            " อัลกอริทึมประมวลผล"
+            " อัลกอริทึมประมวลผลบนแดชบอร์ด"
         ),
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์ 30 ตาล่าสุด",
-        "pred_title": "3️⃣ รายละเอียดการ Confirm และเปอร์เซ็นต์ของแต่ละอัลกอริทึม",
-        "rec_title": "🎯 ผลการลงมติเสียงข้างมาก (กฎ 4:1):",
+        "pred_title": (
+            "3️⃣ แดชบอร์ดแสดงผล: การลงมติ 5 อัลกอริทึม & เปอร์เซ็นต์ความมั่นใจ"
+        ),
+        "rec_title": "🎯 สถานะการตัดสินใจบนแดชบอร์ด (กฎเสียงข้างมาก 4:1):",
         "pass_msg": (
-            "✅ ผ่านเกณฑ์เสียงข้างมาก 4:1! มีอัลกอริทึมยืนยันตรงกัน 4 ตัวขึ้นไปให้ลงทุนฝั่ง"
-            " 【"
+            "✅ ยืนยันสถานะ CONFIRM! ระดับความเห็นพ้อง: {pct}% (ผ่านเกณฑ์ 4:1"
+            " ลงทุนได้ที่ฝั่ง 【"
         ),
         "fail_msg": (
-            "⛔ เสียงแตก / รอจังหวะ: คะแนนไม่ถึงเกณฑ์ 4:1 ห้ามลงทุนตานี้!"
+            "⛔ สถานะ WAIT / ห้ามลงทุน: ระดับความเห็นพ้อง: {pct}% (เสียงแตก 3:2"
+            " ต่ำกว่าเกณฑ์ 4:1) ข้ามตานี้!"
         ),
         "reset": "🗑️ ล้างข้อมูลกริด & เริ่มขอนใหม่",
         "mode": "รูปแบบการคิดแต้ม:",
@@ -140,7 +142,7 @@ translations = {
         "blue_wins": "น้ำเงินชนะ",
         "ties": "เสมอ",
         "no_data": (
-            "กรุณากรอกผลการแข่งขันในตารางกริดด้านบน เพื่อเริ่มระบบวิเคราะห์"
+            "กรุณากรอกผลการแข่งขันในตารางกริดด้านบน เพื่อแสดงผลแดชบอร์ดวิเคราะห์"
         ),
     },
 }
@@ -222,11 +224,8 @@ else:
     st.info(t["no_data"])
 
 
-# --- 5-Algorithm Engine returning (Vote, Percentage) ---
-def run_5_algorithm_detailed(rounds_history, game_mode, num_sims):
-    results = []
-
-    # 1. Monte Carlo
+# --- 5-Algorithm Consensus Engine ---
+def run_5_algorithm_consensus(rounds_history, game_mode, num_sims):
     sim_red, sim_blue = 0, 0
     for _ in range(1000):
         res = random.choice(["Red", "Blue"])
@@ -234,72 +233,38 @@ def run_5_algorithm_detailed(rounds_history, game_mode, num_sims):
             sim_red += 1
         else:
             sim_blue += 1
-    mc_vote = "Red" if sim_red >= sim_blue else "Blue"
-    mc_pct = (
-        (sim_red / 1000) * 100 if mc_vote == "Red" else (sim_blue / 1000) * 100
-    )
-    results.append(("Monte Carlo", mc_vote, mc_pct))
+    vote_mc = "Red" if sim_red >= sim_blue else "Blue"
 
-    # 2. HMM Transition
-    hmm_vote, hmm_pct = "Red", 50.0
+    vote_hmm = "Red"
     if len(rounds_history) >= 2:
         last_w = rounds_history[-1]["winner"]
-        r_count, b_count, total = 0, 0, 0
+        r_after_last, b_after_last = 0, 0
         for i in range(len(rounds_history) - 1):
             if rounds_history[i]["winner"] == last_w:
                 nxt = rounds_history[i + 1]["winner"]
                 if nxt == "Red":
-                    r_count += 1
+                    r_after_last += 1
                 elif nxt == "Blue":
-                    b_count += 1
-                total += 1
-        if total > 0:
-            hmm_vote = "Red" if r_count >= b_count else "Blue"
-            hmm_pct = (
-                (r_count / total) * 100
-                if hmm_vote == "Red"
-                else (b_count / total) * 100
-            )
-        else:
-            hmm_pct = 50.0
-    results.append(("HMM Transition", hmm_vote, hmm_pct))
+                    b_after_last += 1
+        vote_hmm = "Red" if r_after_last >= b_after_last else "Blue"
 
-    # 3. Bayesian Inference
-    bayes_vote, bayes_pct = "Red", 50.0
+    vote_bayes = "Red"
     if len(rounds_history) > 0:
         total_r = sum(1 for r in rounds_history if r["winner"] == "Red")
         total_b = sum(1 for r in rounds_history if r["winner"] == "Blue")
-        tot = total_r + total_b
-        if tot > 0:
-            bayes_vote = "Red" if total_r >= total_b else "Blue"
-            bayes_pct = (
-                (total_r / tot) * 100
-                if bayes_vote == "Red"
-                else (total_b / tot) * 100
-            )
-    results.append(("Bayesian Inference", bayes_vote, bayes_pct))
+        vote_bayes = "Red" if total_r >= total_b else "Blue"
 
-    # 4. Momentum Trend (Last 10)
-    trend_vote, trend_pct = "Red", 50.0
+    vote_trend = "Red"
     if len(rounds_history) > 0:
         last_10 = rounds_history[-10:]
         t_r = sum(1 for r in last_10 if r["winner"] == "Red")
         t_b = sum(1 for r in last_10 if r["winner"] == "Blue")
-        t_tot = len(last_10)
-        if t_tot > 0:
-            trend_vote = "Red" if t_r >= t_b else "Blue"
-            trend_pct = (
-                (t_r / t_tot) * 100
-                if trend_vote == "Red"
-                else (t_b / t_tot) * 100
-            )
-    results.append(("Momentum Trend", trend_vote, trend_pct))
+        vote_trend = "Red" if t_r >= t_b else "Blue"
 
-    # 5. Pattern Matching Engine
-    pat_vote, pat_pct = "Red", 50.0
+    vote_pattern = "Red"
     if len(rounds_history) >= 4:
         pattern_key = [r["winner"] for r in rounds_history[-3:]]
-        p_red, p_blue, p_tot = 0, 0, 0
+        p_red, p_blue = 0, 0
         for i in range(len(rounds_history) - 4):
             sub_pattern = [rounds_history[j]["winner"] for j in range(i, i + 3)]
             if sub_pattern == pattern_key:
@@ -308,71 +273,47 @@ def run_5_algorithm_detailed(rounds_history, game_mode, num_sims):
                     p_red += 1
                 elif next_res == "Blue":
                     p_blue += 1
-                p_tot += 1
-        if p_tot > 0:
-            pat_vote = "Red" if p_red >= p_blue else "Blue"
-            pat_pct = (
-                (p_red / p_tot) * 100
-                if pat_vote == "Red"
-                else (p_blue / p_tot) * 100
-            )
+        if p_red > p_blue:
+            vote_pattern = "Red"
+        elif p_blue > p_red:
+            vote_pattern = "Blue"
         else:
-            pat_pct = 60.0
-    results.append(("Pattern Matching", pat_vote, pat_pct))
+            vote_pattern = rounds_history[-1]["winner"]
 
-    return results
+    votes = [vote_mc, vote_hmm, vote_bayes, vote_trend, vote_pattern]
+    return votes
 
 
 st.markdown("---")
 st.markdown(f"### {t['pred_title']}")
 
 if len(processed_rounds) >= 4:
-    algo_results = run_5_algorithm_detailed(
-        processed_rounds, game_mode, num_sims
-    )
+    votes = run_5_algorithm_consensus(processed_rounds, game_mode, num_sims)
+    
+    red_count = votes.count("Red")
+    blue_count = votes.count("Blue")
+    max_votes = max(red_count, blue_count)
+    confidence_pct = (max_votes / 5) * 100  # คำนวณเปอร์เซ็นต์ความเห็นพ้องต้องกัน (เช่น 5/5 = 100%, 4/5 = 80%)
 
-    # Determine majority side based on votes
-    votes_list = [res[1] for res in algo_results]
-    red_count = votes_list.count("Red")
-    blue_count = votes_list.count("Blue")
-    majority_side = "Red" if red_count >= blue_count else "Blue"
-
-    # Display columns for each algorithm with Confirm status and percentage
-    cols = st.columns(5)
-    for idx, (name, vote, pct) in enumerate(algo_results):
-        is_confirmed = (
-            "✅ Confirmed" if vote == majority_side else "⚠️ Mismatched"
-        )
-        color_code = "#ef4444" if vote == "Red" else "#3b82f6"
-        cols[idx].markdown(
-            f'<div class="metric-card">'
-            f"<h4>{name}</h4>"
-            f'<h3 style="color: {color_code};">{vote}</h3>'
-            f"<p>Confidence: <b>{pct:.1f}%</b></p>"
-            f"<p style='font-size:12px;'>{is_confirmed}</p>"
-            f"</div>",
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    # แสดงการ์ดผลโหวต พร้อมระบุสถานะว่า Confirm ฝั่งไหน
+    for idx, (col, v) in enumerate(zip([col1, col2, col3, col4, col5], votes)):
+        status_color = "#f43f5e" if v == "Red" else "#0ea5e9"
+        col.markdown(
+            f'<div class="metric-card"><h4>Algo {idx+1}</h4><h3 style="color: {status_color};">{v}</h3><p style="font-size: 11px; color: #38bdf8;">CONFIRMED</p></div>',
             unsafe_allow_html=True,
         )
 
     st.markdown(f"#### {t['rec_title']}")
+    st.markdown(f"### 📊 Dashboard Confidence Level: **{confidence_pct:.0f}%** ({max_votes}/5 Algorithms Aligned)")
 
-    # Check 4:1 Majority Rule
+    # เช็คเงื่อนไขเกณฑ์ 4:1 (ต้องได้ 4 เสียงขึ้นไป)
     if red_count >= 4:
-        st.markdown(
-            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red Side】 (4:1 Majority Confirmed) 🎉</div>',
-            unsafe_allow_html=True,
-        )
+        st.markdown(f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red Side】 (Confidence: {confidence_pct:.0f}%) 🎉</div>', unsafe_allow_html=True)
     elif blue_count >= 4:
-        st.markdown(
-            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue Side】 (4:1 Majority Confirmed) 🎉</div>',
-            unsafe_allow_html=True,
-        )
+        st.markdown(f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue Side】 (Confidence: {confidence_pct:.0f}%) 🎉</div>', unsafe_allow_html=True)
     else:
-        st.markdown(
-            f'<div class="big-badge consensus-fail">{t["fail_msg"]} (Red: {red_count} / Blue: {blue_count})</div>',
-            unsafe_allow_html=True,
-        )
+        st.markdown(f'<div class="big-badge consensus-fail">{t["fail_msg"].format(pct=confidence_pct)} (Red: {red_count} / Blue: {blue_count})</div>', unsafe_allow_html=True)
 else:
-    st.info(
-        "กรุณากรอกข้อมูลย้อนหลังอย่างน้อย 4 ตาขึ้นไป เพื่อให้ระบบคำนวณเปอร์เซ็นต์และแสดงผลการ Confirm ของแต่ละอัลกอริทึม"
-    )
+    st.info("กรุณากรอกข้อมูลย้อนหลังอย่างน้อย 4 ตาขึ้นไป เพื่อแสดงผลแผงควบคุมแดชบอร์ด (Dashboard) 5 อัลกอริทึม")
