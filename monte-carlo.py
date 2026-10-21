@@ -95,6 +95,7 @@ translations = {
         "reset": "🗑️ Reset Data & Clear History",
         "mode": "Game Scoring Mode:",
         "sims": "Monte Carlo Intensity",
+        "no_data": "Please enter round outcomes and click **Confirm Grid Data** to start analytics."
     },
     "ไทย": {
         "title": "🃏 แดชบอร์ดพยากรณ์ขั้นสูง 5 อัลกอริทึม (PRO LEVEL)",
@@ -115,6 +116,7 @@ translations = {
         "reset": "🗑️ ล้างข้อมูลและเริ่มขอนใหม่",
         "mode": "รูปแบบการคิดแต้ม:",
         "sims": "ความเข้มข้นของตัวจำลอง (Iterations)",
+        "no_data": "กรุณากรอกผลการแข่งขันในตารางกริดแล้วกด **Confirm** เพื่อแสดงผลแดชบอร์ด"
     },
 }
 
