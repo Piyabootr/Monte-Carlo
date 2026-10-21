@@ -7,24 +7,29 @@ st.set_page_config(
     page_title="Pro Card Shoe Predictor Dashboard", page_icon="🃏", layout="wide"
 )
 
-# Professional Modern Blue & Sky Blue Gradient Theme Styling
+# Professional Deep Blue & Midnight Black Gradient Theme Styling (โทนน้ำเงินป่นดำพรีเมียม)
 st.markdown(
     """
 <style>
+    /* Main Background: Gradient Deep Midnight Black & Navy Blue */
     .stApp {
-        background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 50%, #38bdf8 100%);
-        color: #ffffff;
+        background: linear-gradient(135deg, #050b14 0%, #0a1128 50%, #172554 100%);
+        color: #f8fafc;
     }
+    
+    /* Glassmorphism Metric Cards with Dark Blue-Black Tint */
     .metric-card {
-        background: rgba(15, 23, 42, 0.75);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(56, 189, 248, 0.4);
+        background: rgba(10, 17, 40, 0.85);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(30, 58, 138, 0.6);
         padding: 18px;
         border-radius: 16px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.6);
         text-align: center;
         margin-bottom: 15px;
     }
+    
+    /* Vibrant Big Betting Recommendation Badges */
     .big-badge {
         font-size: 22px;
         font-weight: bold;
@@ -33,10 +38,14 @@ st.markdown(
         text-align: center;
         margin-top: 15px;
         margin-bottom: 15px;
-        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.7);
     }
-    .consensus-pass { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; border: 2px solid #34d399; }
-    .consensus-fail { background: rgba(30, 41, 59, 0.9); color: #f1f5f9; border: 2px solid rgba(239, 68, 68, 0.6); }
+    .red-win { background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 100%); color: white; border: 2px solid #ef4444; }
+    .blue-win { background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%); color: white; border: 2px solid #3b82f6; }
+    .tie-win { background: linear-gradient(135deg, #059669 0%, #064e3b 100%); color: white; border: 2px solid #10b981; }
+    .wait-signal { background: rgba(15, 23, 42, 0.95); color: #94a3b8; border: 2px solid rgba(51, 65, 85, 0.8); }
+    
+    /* Roadmap History Dots */
     .history-dot {
         display: inline-block;
         width: 40px;
@@ -48,11 +57,13 @@ st.markdown(
         color: white;
         margin: 5px;
         font-size: 14px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
+    
+    /* Sidebar Styling (Dark Navy & Black) */
     section[data-testid="stSidebar"] {
-        background-color: #0b1329;
-        border-right: 1px solid rgba(56, 189, 248, 0.2);
+        background-color: #030712;
+        border-right: 1px solid rgba(30, 58, 138, 0.4);
     }
 </style>
 """,
@@ -224,9 +235,9 @@ if processed_rounds:
     badges_html = ""
     for r in processed_rounds:
         bg = (
-            "#f43f5e"
+            "#ef4444"
             if r["winner"] == "Red"
-            else ("#0ea5e9" if r["winner"] == "Blue" else "#10b981")
+            else ("#3b82f6" if r["winner"] == "Blue" else "#10b981")
         )
         badges_html += f'<span class="history-dot" style="background-color:{bg};">{r["winner"][0]}</span>'
     st.markdown(badges_html, unsafe_allow_html=True)
@@ -317,11 +328,11 @@ if len(processed_rounds) >= 4:
     for idx, (col, v, name) in enumerate(
         zip([col1, col2, col3, col4, col5], votes, algo_names)
     ):
-        status_color = "#f43f5e" if v == "Red" else "#0ea5e9"
+        status_color = "#ef4444" if v == "Red" else "#3b82f6"
         col.markdown(
             f'<div class="metric-card"><h4>{name}</h4><h3 style="color:'
             f' {status_color};">{v}</h3><p style="font-size: 11px; color:'
-            ' #38bdf8;">CONFIRMED</p></div>',
+            ' #94a3b8;">CONFIRMED</p></div>',
             unsafe_allow_html=True,
         )
 
@@ -331,8 +342,7 @@ if len(processed_rounds) >= 4:
         f" ({max_votes}/5 Algorithms Aligned)"
     )
 
-    # Streamlit Dialog Popup เมื่อผ่านเกณฑ์ 4:1
-    @st.dialog("🚨 Investment Alert & Signal Confirmed")
+    @st.dialog("🚨 Investment Signal Confirmed")
     def show_popup_alert(side, pct):
         st.success(
             t["popup_text"].format(
@@ -349,7 +359,6 @@ if len(processed_rounds) >= 4:
             f" (Confidence: {confidence_pct:.0f}%) 🎉</div>",
             unsafe_allow_html=True,
         )
-        # เรียกใช้งาน Popup ทันทีที่ผ่านเกณฑ์
         if st.button(
             "🔔 Show Popup Signal Alert", type="primary", use_container_width=True
         ):
