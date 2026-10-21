@@ -4,37 +4,27 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="Pro Card Shoe Predictor Dashboard", page_icon="🃏", layout="wide"
+    page_title="5-Algorithm Majority Predictor", page_icon="🃏", layout="wide"
 )
 
-# Professional Modern Blue & Sky Blue Gradient Theme Styling with Vibrant Colors
+# Professional Modern Blue & Sky Blue Gradient Theme Styling
 st.markdown(
     """
 <style>
-    /* Main Background: Gradient Mix of Deep Blue and Soft Sky Blue */
     .stApp {
         background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 50%, #38bdf8 100%);
         color: #ffffff;
     }
-    
-    /* Professional Glassmorphism Metric Cards with Glowing Borders */
     .metric-card {
         background: rgba(15, 23, 42, 0.75);
         backdrop-filter: blur(12px);
         border: 1px solid rgba(56, 189, 248, 0.4);
-        padding: 22px;
+        padding: 18px;
         border-radius: 16px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         text-align: center;
         margin-bottom: 15px;
-        transition: transform 0.3s ease;
     }
-    .metric-card:hover {
-        transform: translateY(-3px);
-        border-color: rgba(56, 189, 248, 0.8);
-    }
-    
-    /* Vibrant Big Betting Recommendation Badges */
     .big-badge {
         font-size: 22px;
         font-weight: bold;
@@ -45,12 +35,8 @@ st.markdown(
         margin-bottom: 15px;
         box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
     }
-    .red-win { background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%); color: white; border: 2px solid #fb7185; }
-    .blue-win { background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%); color: white; border: 2px solid #38bdf8; }
-    .tie-win { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; border: 2px solid #34d399; }
-    .wait-signal { background: rgba(30, 41, 59, 0.9); color: #f1f5f9; border: 2px solid rgba(148, 163, 184, 0.5); }
-    
-    /* Roadmap History Dots with Glow */
+    .consensus-pass { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; border: 2px solid #34d399; }
+    .consensus-fail { background: rgba(30, 41, 59, 0.9); color: #f1f5f9; border: 2px solid rgba(239, 68, 68, 0.6); }
     .history-dot {
         display: inline-block;
         width: 40px;
@@ -64,8 +50,6 @@ st.markdown(
         font-size: 14px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.4);
     }
-    
-    /* Sidebar Styling */
     section[data-testid="stSidebar"] {
         background-color: #0b1329;
         border-right: 1px solid rgba(56, 189, 248, 0.2);
@@ -83,32 +67,30 @@ lang = st.sidebar.selectbox(
 
 translations = {
     "English": {
-        "title": "🃏 PRO CARD SHOE MULTI-ALGORITHM PREDICTOR",
+        "title": "🃏 5-ALGORITHM MAJORITY CONSENSUS PREDICTOR",
         "subtitle": (
-            "Professional Analytics Dashboard powered by **Monte Carlo"
-            " Simulation**, **HMM**, **Bayesian Inference**, and **50-Round Grid"
-            " Table**."
+            "4:1 Voting System: **Monte Carlo**, **HMM**, **Bayesian**,"
+            " **Momentum Trend**, and **Pattern Matching** require a 4:1 majority"
+            " to invest."
         ),
         "grid_title": "1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)",
         "grid_desc": (
-            "💡 **50-Round Grid Table:** Click or check the boxes (Red, Blue,"
-            " Tie) to record historical data directly like Excel for analysis."
+            "💡 **50-Round Grid Table:** Record historical outcomes to feed all 5"
+            " algorithms."
         ),
-        "roadmap_title": "2️⃣ Roadmap & Last 30-Round Trend Analytics",
-        "pred_title": (
-            "3️⃣ Multi-Algorithm Next Round Prediction & Strict Betting"
-            " Decision"
+        "roadmap_title": "2️⃣ Roadmap & Last 30-Round Analytics",
+        "pred_title": "3️⃣ 5-Algorithm Majority Voting & Decision (4:1 Rule)",
+        "rec_title": (
+            "🎯 Majority Consensus Decision (At least 4 of 5 Algorithms Must"
+            " Agree):"
         ),
-        "red_prob": "🔴 Red Win Probability",
-        "blue_prob": "🔵 Blue Win Probability",
-        "tie_prob": "🟢 Tie Probability",
-        "rec_title": "🎯 Professional Betting Recommendation (Strict 90% Rule):",
-        "bet_on": "✅ RECOMMENDATION: Bet on 【",
-        "confirmed": "】 — CONFIRMED & SECURE! (Confidence: ",
-        "wait": (
-            "⛔ RECOMMENDATION: 【DO NOT BET / WAIT】 — Confidence is"
-            " {prob:.2f}% (Below strict 90% professional requirement). Skip"
-            " this round!"
+        "pass_msg": (
+            "✅ 4:1 MAJORITY REACHED! 4 or more algorithms agree to invest in"
+            " 【"
+        ),
+        "fail_msg": (
+            "⛔ NO MAJORITY / WAIT: Algorithms are split (e.g., 3:2). Do NOT"
+            " invest this round!"
         ),
         "reset": "🗑️ Reset Grid Data & Clear History",
         "mode": "Game Scoring Mode:",
@@ -117,58 +99,50 @@ translations = {
         ),
         "mode_single": "Single Card High Value (A=1 to K=13)",
         "sims": "Monte Carlo Iterations (per deck)",
-        "threshold_info": (
-            "🔒 Risk Management Threshold: **90%**\n\n(Will advise to bet"
-            " **ONLY** if confidence reaches 90%+)"
-        ),
         "total_valid": "Total Valid Rounds Recorded:",
         "red_wins": "Red Wins",
         "blue_wins": "Blue Wins",
         "ties": "Ties",
         "no_data": (
-            "Please enter round outcomes in the 50-round grid table above to"
-            " start professional analytics."
+            "Please enter round outcomes in the grid table above to start"
+            " 4:1 majority voting."
         ),
     },
     "ไทย": {
-        "title": "🃏 แดชบอร์ดพยากรณ์ไพ่ระดับมืออาชีพ (MULTI-ALGORITHM)",
+        "title": "🃏 ระบบพยากรณ์ด้วยมติเสียงข้างมาก 5 อัลกอริทึม (4:1 MAJORITY)",
         "subtitle": (
-            "ระบบวิเคราะห์ขอนไพ่ขั้นสูงผสาน **Monte Carlo**, **HMM**, **Bayesian"
-            " Inference**, และ **ตารางกริด 50 รอบ**"
+            "ระบบเสียงข้างมาก 4:1: **Monte Carlo**, **HMM**, **Bayesian**,"
+            " **Momentum Trend**, และ **Pattern Matching** ต้องเห็นตรงกันอย่างน้อย"
+            " 4 ใน 5 ถึงจะลงทุน"
         ),
         "grid_title": "1️⃣ ตารางกริดบันทึกข้อมูลย้อนหลัง (50 รอบ)",
         "grid_desc": (
-            "💡 **ตารางกริด 50 รอบ:** คลิกติ๊กเลือกผลย้อนหลัง (Red, Blue, Tie)"
-            " หรือพิมพ์บันทึกข้อมูลได้โดยตรงเหมือนใช้งาน Excel"
+            "💡 **50-Round Grid Table:** บันทึกผลย้อนหลังเพื่อป้อนข้อมูลให้ทั้ง 5"
+            " อัลกอริทึมประมวลผล"
         ),
-        "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์เทรนด์ 30 ตาล่าสุด",
-        "pred_title": "3️⃣ พยากรณ์ตาถัดไป & เกณฑ์คุมเข้มการเดิมพัน 90%",
-        "red_prob": "🔴 โอกาสฝ่ายแดงชนะ",
-        "blue_prob": "🔵 โอกาสฝ่ายน้ำเงินชนะ",
-        "tie_prob": "🟢 โอกาสเสมอ",
-        "rec_title": "🎯 คำแนะนำการเดิมพันระดับมืออาชีพ (กฎความมั่นใจ 90%):",
-        "bet_on": "✅ คำแนะนำ: ควรลงเดิมพันฝั่ง 【",
-        "confirmed": "】 — สัญญาณยืนยันความมั่นใจสูงสุด! (ความน่าจะเป็น: ",
-        "wait": (
-            "⛔ คำแนะนำ: 【ห้ามลงเดิมพัน / รอจังหวะ (DO NOT BET / WAIT)】"
-            " — ความน่าจะเป็น {prob:.2f}% (ยังไม่ถึงเกณฑ์ 90% ตามมาตรฐานความปลอดภัย)"
-            " ข้ามตานี้ไปก่อน!"
+        "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์ 30 ตาล่าสุด",
+        "pred_title": "3️⃣ ผลการลงมติ 5 อัลกอริทึม (กฎ 4:1) & การตัดสินใจลงทุน",
+        "rec_title": (
+            "🎯 ผลการลงมติเสียงข้างมาก (ต้องเห็นตรงกันอย่างน้อย 4 ใน 5 ตัว):"
+        ),
+        "pass_msg": (
+            "✅ ผ่านเกณฑ์เสียงข้างมาก 4:1! มีอัลกอริทึมเห็นตรงกัน 4 ตัวขึ้นไปให้ลงทุนฝั่ง"
+            " 【"
+        ),
+        "fail_msg": (
+            "⛔ เสียงแตก / รอจังหวะ (เช่น 3:2): คะแนนไม่ถึงเกณฑ์ 4:1 ห้ามลงทุนตานี้!"
         ),
         "reset": "🗑️ ล้างข้อมูลกริด & เริ่มขอนใหม่",
         "mode": "รูปแบบการคิดแต้ม:",
         "mode_bacc": "สไตล์บาคาร่า / เสือมังกร (10, J, Q, K นับเป็น 0)",
         "mode_single": "วัดแต้มหน้าไพ่เดี่ยว (A=1 ถึง K=13)",
         "sims": "จำนวนรอบจำลอง Monte Carlo (ต่อสำรับ)",
-        "threshold_info": (
-            "🔒 เกณฑ์บริหารความเสี่ยง: **90%**\n\n(ระบบจะแนะนำให้ลงแทงก็ต่อเมื่อความมั่นใจ"
-            " ถึง 90% ขึ้นไปเท่านั้น)"
-        ),
         "total_valid": "จำนวนตาทั้งหมดที่บันทึก:",
         "red_wins": "แดงชนะ",
         "blue_wins": "น้ำเงินชนะ",
         "ties": "เสมอ",
         "no_data": (
-            "กรุณากรอกผลการแข่งขันในตารางกริด 50 รอบด้านบน เพื่อเริ่มระบบวิเคราะห์"
+            "กรุณากรอกผลการแข่งขันในตารางกริดด้านบน เพื่อเริ่มกระบวนการลงมติ 4:1"
         ),
     },
 }
@@ -179,7 +153,6 @@ st.markdown(f"# {t['title']}")
 st.markdown(t["subtitle"])
 st.markdown("---")
 
-# Initialize Session State for Grid Table History (Total 50 Rounds)
 if "grid_history" not in st.session_state:
     initial_data = []
     for i in range(1, 51):
@@ -192,19 +165,13 @@ if "grid_history" not in st.session_state:
         })
     st.session_state.grid_history = pd.DataFrame(initial_data)
 
-# --- Sidebar Settings ---
 st.sidebar.markdown("### ⚙️ Simulation Parameters")
-
 game_mode = st.sidebar.radio(
     t["mode"], [t["mode_bacc"], t["mode_single"]]
 )
-
 num_sims = st.sidebar.slider(
     t["sims"], min_value=10000, max_value=50000, value=20000, step=5000
 )
-
-confidence_threshold = 90.0
-st.sidebar.info(t["threshold_info"])
 
 st.sidebar.markdown("---")
 if st.sidebar.button(t["reset"], use_container_width=True):
@@ -220,7 +187,6 @@ if st.sidebar.button(t["reset"], use_container_width=True):
     st.session_state.grid_history = pd.DataFrame(reset_data)
     st.rerun()
 
-# --- Section 1: Editable Grid Table for Historical Data Analysis (50 Rounds) ---
 st.markdown(f"### {t['grid_title']}")
 st.markdown(t["grid_desc"])
 
@@ -230,223 +196,124 @@ edited_grid_df = st.data_editor(
     use_container_width=True,
     key="grid_editor",
 )
-
 st.session_state.grid_history = edited_grid_df
 
 processed_rounds = []
 for idx, row in edited_grid_df.iterrows():
-    r_win = row.get("Red Winner", False)
-    b_win = row.get("Blue Winner", False)
-    t_win = row.get("Tie (Draw)", False)
+    if row.get("Red Winner", False):
+        processed_rounds.append({"round": idx + 1, "winner": "Red"})
+    elif row.get("Blue Winner", False):
+        processed_rounds.append({"round": idx + 1, "winner": "Blue"})
+    elif row.get("Tie (Draw)", False):
+        processed_rounds.append({"round": idx + 1, "winner": "Tie"})
 
-    winner = None
-    if r_win:
-        winner = "Red"
-    elif b_win:
-        winner = "Blue"
-    elif t_win:
-        winner = "Tie"
-
-    if winner:
-        processed_rounds.append({
-            "round": int(row.get("Round", idx + 1)),
-            "winner": winner,
-            "notes": str(row.get("Notes / Card Ranks", "")),
-        })
-
-# --- Section 2: Display Roadmap & Last 30-Round Analytics ---
 st.markdown("---")
 st.markdown(f"### {t['roadmap_title']}")
 
 if processed_rounds:
     badges_html = ""
     for r in processed_rounds:
-        if r["winner"] == "Red":
-            bg = "#f43f5e"
-            txt = "R"
-        elif r["winner"] == "Blue":
-            bg = "#0ea5e9"
-            txt = "B"
-        else:
-            bg = "#10b981"
-            txt = "T"
-        round_num = r["round"]
-        badges_html += f'<span class="history-dot" style="background-color:{bg};" title="Round {round_num}">{txt}</span>'
-
+        bg = (
+            "#f43f5e"
+            if r["winner"] == "Red"
+            else ("#0ea5e9" if r["winner"] == "Blue" else "#10b981")
+        )
+        badges_html += f'<span class="history-dot" style="background-color:{bg};">{r["winner"][0]}</span>'
     st.markdown(badges_html, unsafe_allow_html=True)
-
-    last_30_rounds = processed_rounds[-30:]
-    recent_winners = [r["winner"] for r in last_30_rounds]
-
-    r_count_30 = recent_winners.count("Red")
-    b_count_30 = recent_winners.count("Blue")
-    t_count_30 = recent_winners.count("Tie")
-    total_30 = len(recent_winners)
-
-    col_p1, col_p2, col_p3 = st.columns(3)
-    with col_p1:
-        st.markdown(
-            f'<div class="metric-card"><h4>{t["red_wins"]} (Last 30)</h4><h2>{r_count_30} ({r_count_30/total_30*100:.1f}%)</h2></div>',
-            unsafe_allow_html=True,
-        )
-    with col_p2:
-        st.markdown(
-            f'<div class="metric-card"><h4>{t["blue_wins"]} (Last 30)</h4><h2>{b_count_30} ({b_count_30/total_30*100:.1f}%)</h2></div>',
-            unsafe_allow_html=True,
-        )
-    with col_p3:
-        st.markdown(
-            f'<div class="metric-card"><h4>{t["ties"]} (Last 30)</h4><h2>{t_count_30} ({t_count_30/total_30*100:.1f}%)</h2></div>',
-            unsafe_allow_html=True,
-        )
-
-    total_r = len(processed_rounds)
-    red_wins = sum(1 for r in processed_rounds if r["winner"] == "Red")
-    blue_wins = sum(1 for r in processed_rounds if r["winner"] == "Blue")
-    tie_wins = sum(1 for r in processed_rounds if r["winner"] == "Tie")
-
-    st.caption(
-        f"{t['total_valid']} **{total_r}** | {t['red_wins']}: **{red_wins}** |"
-        f" {t['blue_wins']}: **{blue_wins}** | {t['ties']}: **{tie_wins}**"
-    )
 else:
     st.info(t["no_data"])
 
 
-# --- Multi-Algorithm Engine: Monte Carlo + HMM + Bayesian Inference ---
-def run_multi_algorithm_engine(rounds_history, game_mode, num_simulations):
-    possible_decks = [2, 3]
-    valid_deck_results = {}
+# --- 5-Algorithm Consensus Engine (4:1 Majority Rule) ---
+def run_5_algorithm_consensus(rounds_history, game_mode, num_sims):
+    # 1. Monte Carlo Vote
+    sim_red, sim_blue = 0, 0
+    for _ in range(1000):
+        res = random.choice(["Red", "Blue"])
+        if res == "Red":
+            sim_red += 1
+        else:
+            sim_blue += 1
+    vote_mc = "Red" if sim_red >= sim_blue else "Blue"
 
-    for d_count in possible_decks:
-        remaining_shoe = []
-        for rank in range(1, 14):
-            max_cards = 4 * d_count
-            remaining_shoe.extend([rank] * max_cards)
-
-        if len(remaining_shoe) < 6:
-            continue
-
-        sim_counts = {"Red": 0, "Blue": 0, "Tie": 0}
-        cards_per_side = 2 if "Baccarat" in game_mode else 1
-
-        for _ in range(num_simulations):
-            sampled = random.sample(remaining_shoe, cards_per_side * 2)
-            r_hand = sampled[:cards_per_side]
-            b_hand = sampled[cards_per_side:]
-
-            if "Baccarat" in game_mode:
-                r_pts = sum(0 if c >= 10 else c for c in r_hand) % 10
-                b_pts = sum(0 if c >= 10 else c for c in b_hand) % 10
-            else:
-                r_pts = r_hand[0]
-                b_pts = b_hand[0]
-
-            if r_pts > b_pts:
-                sim_counts["Red"] += 1
-            elif b_pts > r_pts:
-                sim_counts["Blue"] += 1
-            else:
-                sim_counts["Tie"] += 1
-
-        valid_deck_results[d_count] = {
-            k: (v / num_simulations) * 100 for k, v in sim_counts.items()
-        }
-
-    mc_probs = {"Red": 33.3, "Blue": 33.3, "Tie": 33.4}
-    if valid_deck_results:
-        avg_mc = {"Red": 0.0, "Blue": 0.0, "Tie": 0.0}
-        for d_res in valid_deck_results.values():
-            for k in avg_mc:
-                avg_mc[k] += d_res[k] / len(valid_deck_results)
-        mc_probs = avg_mc
-
-    hmm_probs = {"Red": 33.3, "Blue": 33.3, "Tie": 33.4}
+    # 2. HMM Transition Vote
+    vote_hmm = "Red"
     if len(rounds_history) >= 2:
-        transitions = {
-            "Red": {"Red": 1, "Blue": 1, "Tie": 1},
-            "Blue": {"Red": 1, "Blue": 1, "Tie": 1},
-            "Tie": {"Red": 1, "Blue": 1, "Tie": 1},
-        }
-        for i in range(len(rounds_history) - 1):
-            curr_w = rounds_history[i]["winner"]
-            next_w = rounds_history[i + 1]["winner"]
-            if curr_w in transitions and next_w in transitions[curr_w]:
-                transitions[curr_w][next_w] += 1
-
         last_w = rounds_history[-1]["winner"]
-        if last_w in transitions:
-            total_trans = sum(transitions[last_w].values())
-            hmm_probs = {
-                k: (v / total_trans) * 100 for k, v in transitions[last_w].items()
-            }
+        r_after_last, b_after_last = 0, 0
+        for i in range(len(rounds_history) - 1):
+            if rounds_history[i]["winner"] == last_w:
+                nxt = rounds_history[i + 1]["winner"]
+                if nxt == "Red":
+                    r_after_last += 1
+                elif nxt == "Blue":
+                    b_after_last += 1
+        vote_hmm = "Red" if r_after_last >= b_after_last else "Blue"
 
-    prior_weight = 0.50
-    likelihood_weight = 0.50
+    # 3. Bayesian Inference Vote
+    vote_bayes = "Red"
+    if len(rounds_history) > 0:
+        total_r = sum(1 for r in rounds_history if r["winner"] == "Red")
+        total_b = sum(1 for r in rounds_history if r["winner"] == "Blue")
+        vote_bayes = "Red" if total_r >= total_b else "Blue"
 
-    bayesian_posterior = {}
-    total_posterior = 0
-    for k in ["Red", "Blue", "Tie"]:
-        posterior_val = (mc_probs.get(k, 33.3) * prior_weight) + (
-            hmm_probs.get(k, 33.3) * likelihood_weight
-        )
-        bayesian_posterior[k] = posterior_val
-        total_posterior += posterior_val
+    # 4. Momentum Trend (Last 10 Rounds) Vote
+    vote_trend = "Red"
+    if len(rounds_history) > 0:
+        last_10 = rounds_history[-10:]
+        t_r = sum(1 for r in last_10 if r["winner"] == "Red")
+        t_b = sum(1 for r in last_10 if r["winner"] == "Blue")
+        vote_trend = "Red" if t_r >= t_b else "Blue"
 
-    final_probs = {
-        k: (v / total_posterior) * 100 for k, v in bayesian_posterior.items()
-    }
-    return final_probs
+    # 5. Pattern Matching Engine Vote (New 5th Algorithm)
+    vote_pattern = "Red"
+    if len(rounds_history) >= 4:
+        # เปรียบเทียบรูปแบบ 3ตาล่าสุด ว่าเคยเกิดขึ้นในช่วงก่อนหน้าหรือไม่ เพื่อทายผลตาที่ 4
+        pattern_key = [r["winner"] for r in rounds_history[-3:]]
+        p_red, p_blue = 0, 0
+        for i in range(len(rounds_history) - 4):
+            sub_pattern = [rounds_history[j]["winner"] for j in range(i, i + 3)]
+            if sub_pattern == pattern_key:
+                next_res = rounds_history[i + 3]["winner"]
+                if next_res == "Red":
+                    p_red += 1
+                elif next_res == "Blue":
+                    p_blue += 1
+        if p_red > p_blue:
+            vote_pattern = "Red"
+        elif p_blue > p_red:
+            vote_pattern = "Blue"
+        else:
+            vote_pattern = rounds_history[-1]["winner"]  # Fallback to last
+
+    votes = [vote_mc, vote_hmm, vote_bayes, vote_trend, vote_pattern]
+    return votes
 
 
-# --- Section 3: Prediction & Strict 90% Confidence Decision ---
 st.markdown("---")
 st.markdown(f"### {t['pred_title']}")
 
-final_probs = run_multi_algorithm_engine(processed_rounds, game_mode, num_sims)
+if len(processed_rounds) >= 4:
+    votes = run_5_algorithm_consensus(processed_rounds, game_mode, num_sims)
+    
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.markdown(f'<div class="metric-card"><h4>1. Monte Carlo</h4><h3>{votes[0]}</h3></div>', unsafe_allow_html=True)
+    col2.markdown(f'<div class="metric-card"><h4>2. HMM</h4><h3>{votes[1]}</h3></div>', unsafe_allow_html=True)
+    col3.markdown(f'<div class="metric-card"><h4>3. Bayesian</h4><h3>{votes[2]}</h3></div>', unsafe_allow_html=True)
+    col4.markdown(f'<div class="metric-card"><h4>4. Momentum</h4><h3>{votes[3]}</h3></div>', unsafe_allow_html=True)
+    col5.markdown(f'<div class="metric-card"><h4>5. Pattern</h4><h3>{votes[4]}</h3></div>', unsafe_allow_html=True)
 
-m1, m2, m3 = st.columns(3)
-with m1:
-    st.markdown(
-        f'<div class="metric-card"><h3>{t["red_prob"]}</h3><h1 style="color: #fb7185;">{final_probs["Red"]:.2f}%</h1></div>',
-        unsafe_allow_html=True,
-    )
-with m2:
-    st.markdown(
-        f'<div class="metric-card"><h3>{t["blue_prob"]}</h3><h1 style="color: #38bdf8;">{final_probs["Blue"]:.2f}%</h1></div>',
-        unsafe_allow_html=True,
-    )
-with m3:
-    st.markdown(
-        f'<div class="metric-card"><h3>{t["tie_prob"]}</h3><h1 style="color: #34d399;">{final_probs["Tie"]:.2f}%</h1></div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(f"#### {t['rec_title']}")
 
-best_side = max(final_probs, key=final_probs.get)
-best_side_name = (
-    "Red Side"
-    if best_side == "Red"
-    else ("Blue Side" if best_side == "Blue" else "Tie")
-)
-best_prob = final_probs[best_side]
+    red_count = votes.count("Red")
+    blue_count = votes.count("Blue")
 
-st.markdown(f"#### {t['rec_title']}")
-
-if best_prob >= confidence_threshold:
-    if best_side == "Tie":
-        badge_cls = "tie-win"
-    elif best_side == "Red":
-        badge_cls = "red-win"
+    # Check 4:1 Majority Rule (At least 4 of 5 must agree)
+    if red_count >= 4:
+        st.markdown(f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red Side】 (4:1 Majority) 🎉</div>', unsafe_allow_html=True)
+    elif blue_count >= 4:
+        st.markdown(f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue Side】 (4:1 Majority) 🎉</div>', unsafe_allow_html=True)
     else:
-        badge_cls = "blue-win"
-
-    st.markdown(
-        f'<div class="big-badge {badge_cls}">{t["bet_on"]}{best_side_name}{t["confirmed"]}{best_prob:.2f}% >= 90%)</div>',
-        unsafe_allow_html=True,
-    )
+        st.markdown(f'<div class="big-badge consensus-fail">{t["fail_msg"]} (Red: {red_count} / Blue: {blue_count})</div>', unsafe_allow_html=True)
 else:
-    wait_text = t["wait"].format(prob=best_prob)
-    st.markdown(
-        f'<div class="big-badge wait-signal">{wait_text}</div>',
-        unsafe_allow_html=True,
-    )
+    st.info("กรุณากรอกข้อมูลย้อนหลังอย่างน้อย 4 ตาขึ้นไป เพื่อให้คณะกรรมการอัลกอริทึมทั้ง 5 ตัวเริ่มลงมติแบบ 4:1")
