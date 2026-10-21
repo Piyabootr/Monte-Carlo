@@ -63,7 +63,7 @@ st.markdown(
         margin-bottom: 15px;
         box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.7);
     }
-    .consensus-pass { background: linear-gradient(135deg, #059669 0%, #064e3b 100%); color: white; border: 2px solid #10b981; }
+    .consensus-pass { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: 2px solid #10b981; }
     .consensus-fail { background: rgba(15, 23, 42, 0.95); color: #94a3b8; border: 2px solid rgba(239, 68, 68, 0.6); }
     .history-dot {
         display: inline-block;
@@ -104,14 +104,14 @@ lang = st.sidebar.selectbox(
 translations = {
     "English": {
         "title": "🃏 ADVANCED 5-ALGORITHM PRO PREDICTOR",
-        "subtitle": "Intensified AI with Bankroll Management, Profit Targets, Pattern Analyzer & Money Management Matrix.",
+        "subtitle": "Intensified AI with Bankroll Management, Profit Targets, Pattern Analyzer & What-If Matrix.",
         "bankroll_title": "💰 Bankroll & Risk Management",
         "init_fund": "Initial Capital",
         "target_profit": "Daily Profit Goal",
         "max_loss": "Max Stop-Loss Limit",
         "base_bet": "Base Unit Bet Size",
         "grid_title": "1️⃣ Historical Data & P/L Entry (50 Rounds)",
-        "grid_desc": "💡 Fill out the round outcomes and your actual Profit/Loss. Click **Confirm Data** to analyze.",
+        "grid_desc": "💡 Fill out the round outcomes and your actual Profit/Loss in **My P/L** column. Click **Confirm Data** to analyze.",
         "confirm_btn": "✅ Confirm Grid Data & Analyze",
         "confirm_success": "✅ Data Confirmed! Ready for analysis.",
         "roadmap_title": "2️⃣ Roadmap & Real-time Pattern Analyzer",
@@ -126,13 +126,11 @@ translations = {
         "target_hit": "🎉 TARGET REACHED: You've hit your daily goal! Stop and enjoy your profits. (Stop Gain)",
         "stop_loss_hit": "⚠️ STOP-LOSS REACHED: You've hit your max loss limit! Stop immediately to protect your bankroll. (Stop Loss)",
         "pred_title": "3️⃣ Intensive 5-Algorithm Voting & Stake Sizing",
-        "sim_title": "🔮 What-If Scenario Matrix & Money Management Analysis",
-        "sim_desc": "Analyzing next-round predictions and P/L simulation if the previous/current outcome triggers specific paths:",
-        "if_red": "If Previous/Outcome is RED",
-        "if_blue": "If Previous/Outcome is BLUE",
-        "if_tie": "If Previous/Outcome is TIE",
-        "stat_next": "Next Predicted:",
-        "stat_pl_sim": "Expected P/L Impact:",
+        "sim_title": "🔮 What-If Scenario Matrix (Next Round Money Management Simulation)",
+        "sim_desc": "Simulating the subsequent round and financial impact if the outcome turns out to be:",
+        "if_red": "If Next is RED (Win/Loss P/L)",
+        "if_blue": "If Next is BLUE (Win/Loss P/L)",
+        "if_tie": "If Next is TIE (Win/Loss P/L)",
         "confirmed_status": "CONFIRMED (4:1)",
         "wait_status": "WAIT (Split)",
         "algo_intensity_header": "⚡ Algorithm Intensification & Accuracy Profiles",
@@ -163,14 +161,14 @@ translations = {
     },
     "ไทย": {
         "title": "🃏 แดชบอร์ดพยากรณ์ขั้นสูง 5 อัลกอริทึม",
-        "subtitle": "ระบบวิเคราะห์เข้มข้น พร้อมคำนวณเงินทุน กำไร ตัววิเคราะห์เค้าไพ่ และเมทริกซ์วิเคราะห์การเดินเงิน",
+        "subtitle": "ระบบวิเคราะห์เข้มข้น พร้อมคำนวณเงินทุน กำไร ตัววิเคราะห์เค้าไพ่ และเมทริกซ์จำลองสถานการณ์การเดินเงิน",
         "bankroll_title": "💰 ตั้งค่าเงินทุนและเป้าหมาย",
         "init_fund": "เงินทุนเริ่มต้น",
         "target_profit": "เป้าหมายกำไรต่อวัน",
         "max_loss": "จุดตัดขาดทุนสูงสุด",
         "base_bet": "เงินเดิมพันขั้นต่ำ",
         "grid_title": "1️⃣ ตารางบันทึกผลและกำไร/ขาดทุน (50 รอบ)",
-        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริงที่ช่อง My P/L จากนั้นกด Confirm",
+        "grid_desc": "💡 ติ๊กผลที่ออกและใส่กำไร/ขาดทุนจริง (ได้เสียเป็นบาท) ที่ช่อง `My P/L` จากนั้นกด Confirm",
         "confirm_btn": "✅ ยืนยันข้อมูลและเริ่มวิเคราะห์",
         "confirm_success": "✅ ยืนยันข้อมูลสำเร็จ! ระบบพร้อมวิเคราะห์แล้ว",
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และตัววิเคราะห์เค้าไพ่",
@@ -185,13 +183,11 @@ translations = {
         "target_hit": "🎉 ถึงเป้าหมายแล้ว: คุณทำกำไรถึงเป้าหมายรายวัน แนะนำให้หยุดพักและถอนกำไรออก!",
         "stop_loss_hit": "⚠️ ตัดขาดทุน: ขาดทุนถึงจุดที่กำหนดไว้ แนะนำให้หยุดเล่นทันทีเพื่อป้องกันเงินทุนสูญหาย!",
         "pred_title": "3️⃣ ผลลงมติ 5 อัลกอริทึมเข้มข้น & คำนวณเงินเดิมพัน",
-        "sim_title": "🔮 วิเคราะห์ผลลัพธ์ล่วงหน้าแยกตามหน้าไพ่ที่ออก (Red / Blue / Tie Analysis & Money Management)",
-        "sim_desc": "วิเคราะห์สถิติจำลองว่า หากตาที่แล้วหรือรูปแบบผลลัพธ์ออกเป็นฝั่งต่างๆ ตาถัดไปควรเดินเงินอย่างไรและคาดการณ์ผลกำไร/ขาดทุน:",
-        "if_red": "ถ้าผลลัพธ์ล่าสุดออก 🔴 RED (แดง)",
-        "if_blue": "ถ้าผลลัพธ์ล่าสุดออก 🔵 BLUE (น้ำเงิน)",
-        "if_tie": "ถ้าผลลัพธ์ล่าสุดออก 🟢 TIE (เสมอ)",
-        "stat_next": "พยากรณ์ตาถัดไป:",
-        "stat_pl_sim": "จำลองผลได้/เสีย (P/L):",
+        "sim_title": "🔮 เมทริกซ์จำลองสถานการณ์และการเดินเงินล่วงหน้า (What-If Scenario Simulation)",
+        "sim_desc": "จำลองสถานการณ์การเดินเงิน ว่าหากตาถัดไปคุณเลือกแทงแล้วผลออกมาเป็น แดง, น้ำเงิน หรือ เสมอ สถานะการเงินและพยากรณ์ตาถัดไปจะเป็นอย่างไร:",
+        "if_red": "สมมติว่าตาถัดไปออก 🔴 RED",
+        "if_blue": "สมมติว่าตาถัดไปออก 🔵 BLUE",
+        "if_tie": "สมมติว่าตาถัดไปออก 🟢 TIE",
         "confirmed_status": "ผ่านเกณฑ์ลงทุน (4:1)",
         "wait_status": "รอจังหวะ (เสียงแตก)",
         "algo_intensity_header": "⚡ ระดับความเข้มข้นและค่าความแม่นยำของอัลกอริทึม",
@@ -296,7 +292,7 @@ if not st.session_state.confirmed_data.empty:
         elif row.get("Tie (Draw)", False): winner = "Tie"
 
         if winner:
-            processed_rounds.append({"round": idx + 1, "winner": winner})
+            processed_rounds.append({"round": idx + 1, "winner": winner, "pl": pl})
 
 current_capital = initial_capital + total_pl
 profit_progress = min(100.0, max(0.0, (total_pl / profit_target) * 100)) if profit_target > 0 else 0
@@ -391,3 +387,118 @@ def run_intensified_algorithms(rounds_history, game_mode, num_sims):
             if r["winner"] == "Red": ema_red += decay
             elif r["winner"] == "Blue": ema_blue += decay
             decay *= 0.80
+        vote_trend = "Red" if ema_red >= ema_blue else "Blue"
+
+    vote_pattern = "Red"
+    if len(rounds_history) >= 5:
+        pattern_key = [r["winner"] for r in rounds_history[-4:]]
+        p_score_r, p_score_b = 0, 0
+        for i in range(len(rounds_history) - 5):
+            sub_pattern = [rounds_history[j]["winner"] for j in range(i, i+4)]
+            if sub_pattern == pattern_key:
+                if rounds_history[i+4]["winner"] == "Red": p_score_r += 4
+                else: p_score_b += 4
+        if p_score_r > p_score_b: vote_pattern = "Red"
+        elif p_score_b > p_score_r: vote_pattern = "Blue"
+        else: vote_pattern = rounds_history[-1]["winner"]
+
+    return [vote_mc, vote_hmm, vote_bayes, vote_trend, vote_pattern]
+
+st.markdown("---")
+st.markdown(f"### {t['pred_title']}")
+
+if len(processed_rounds) >= 5:
+    votes = run_intensified_algorithms(processed_rounds, game_mode, num_sims)
+
+    red_count = votes.count("Red")
+    blue_count = votes.count("Blue")
+    max_votes = max(red_count, blue_count)
+    confidence_pct = (max_votes / 5) * 100
+
+    # แสดงรายละเอียดความเข้มข้นและความแม่นยำของแต่ละอัลกอริทึม
+    st.markdown(f"#### {t['algo_intensity_header']}")
+    col_desc1, col_desc2, col_desc3, col_desc4, col_desc5 = st.columns(5)
+    with col_desc1: st.markdown(f'<div class="algo-profile-box"><b>{t["algo_1_name"]}</b><br>{t["algo_1_desc"]}</div>', unsafe_allow_html=True)
+    with col_desc2: st.markdown(f'<div class="algo-profile-box"><b>{t["algo_2_name"]}</b><br>{t["algo_2_desc"]}</div>', unsafe_allow_html=True)
+    with col_desc3: st.markdown(f'<div class="algo-profile-box"><b>{t["algo_3_name"]}</b><br>{t["algo_3_desc"]}</div>', unsafe_allow_html=True)
+    with col_desc4: st.markdown(f'<div class="algo-profile-box"><b>{t["algo_4_name"]}</b><br>{t["algo_4_desc"]}</div>', unsafe_allow_html=True)
+    with col_desc5: st.markdown(f'<div class="algo-profile-box"><b>{t["algo_5_name"]}</b><br>{t["algo_5_desc"]}</div>', unsafe_allow_html=True)
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    algo_names = [t["algo_1"], t["algo_2"], t["algo_3"], t["algo_4"], t["algo_5"]]
+    
+    for idx, (col, v, name) in enumerate(zip([col1, col2, col3, col4, col5], votes, algo_names)):
+        status_color = "#ef4444" if v == "Red" else "#3b82f6"
+        col.markdown(
+            f'<div class="metric-card"><h4>{name}</h4><h3 style="color: {status_color};">{v}</h3><p style="font-size: 11px; color: #94a3b8;">{t["intensified"]}</p></div>',
+            unsafe_allow_html=True,
+        )
+
+    # คำนวณ Stake Sizing พยากรณ์เงินตาต่อไป
+    if confidence_pct == 100:
+        suggested_stake = base_bet * 2.0
+    elif confidence_pct == 80:
+        suggested_stake = base_bet * 1.0
+    else:
+        suggested_stake = 0.0
+
+    st.markdown(f"#### {t['rec_title']}")
+    st.markdown(f"### {t['conf_level']}: **{confidence_pct:.0f}%** ({max_votes}/5 {t['algo_aligned']})")
+
+    stake_str = f"{suggested_stake:,.0f}" if suggested_stake > 0 else t["wait_stake"]
+
+    if red_count >= 4:
+        st.markdown(
+            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Red】<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>',
+            unsafe_allow_html=True,
+        )
+    elif blue_count >= 4:
+        st.markdown(
+            f'<div class="big-badge consensus-pass">{t["pass_msg"]}Blue】<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(f'<div class="big-badge consensus-fail">{t["fail_msg"]}<br><br>{t["pred_stake"]} <b>{stake_str}</b></div>', unsafe_allow_html=True)
+
+    # --- What-If Scenario Matrix (เมทริกซ์จำลองสถานการณ์ล่วงหน้าและการเดินเงิน) ---
+    st.markdown("---")
+    st.markdown(f"### {t['sim_title']}")
+    st.markdown(t["sim_desc"])
+
+    sim_col1, sim_col2, sim_col3 = st.columns(3)
+    
+    scenarios = {}
+    for hyp in ["Red", "Blue", "Tie"]:
+        temp_history = processed_rounds.copy()
+        temp_history.append({"round": len(temp_history) + 1, "winner": hyp, "pl": base_bet if hyp=="Red" else -base_bet})
+        
+        # คำนวณผลกำไรสมมติ หากตานี้แทงฝั่งที่ระบบแนะนำแล้วผลออกตามสมมติฐาน
+        sim_votes = run_intensified_algorithms(temp_history, game_mode, num_sims)
+        s_red = sim_votes.count("Red")
+        s_blue = sim_votes.count("Blue")
+        s_max = max(s_red, s_blue)
+        s_conf = (s_max / 5) * 100
+        s_favored = "Red" if s_red >= s_blue else "Blue"
+        s_passed = s_max >= 4
+        
+        # จำลอง P/L สมมติสำหรับตาถัดไป
+        sim_pl_impact = base_bet if s_favored == hyp else -base_bet
+        if hyp == "Tie": sim_pl_impact = 0.0
+
+        scenarios[hyp] = {"favored": s_favored, "conf": s_conf, "passed": s_passed, "impact": sim_pl_impact}
+
+    with sim_col1:
+        c_status = t["confirmed_status"] if scenarios["Red"]["passed"] else t["wait_status"]
+        pl_color = "#10b981" if scenarios["Red"]["impact"] >= 0 else "#ef4444"
+        st.markdown(f'<div class="sim-box"><b>{t["if_red"]}</b><br>Next Favored: <span style="color:{"#ef4444" if scenarios["Red"]["favored"]=="Red" else "#3b82f6"}">{scenarios["Red"]["favored"]}</span><br>Confidence: {scenarios["Red"]["conf']:.0f}%<br>Status: <b>{c_status}</b><br>Simulated P/L: <span style="color:{pl_color}; font-weight:bold;">{scenarios["Red"]["impact"]:+,.0f} ฿</span></div>', unsafe_allow_html=True)
+    with sim_col2:
+        c_status = t["confirmed_status"] if scenarios["Blue"]["passed"] else t["wait_status"]
+        pl_color = "#10b981" if scenarios["Blue"]["impact"] >= 0 else "#ef4444"
+        st.markdown(f'<div class="sim-box"><b>{t["if_blue"]}</b><br>Next Favored: <span style="color:{"#ef4444" if scenarios["Blue"]["favored"]=="Red" else "#3b82f6"}">{scenarios["Blue"]["favored"]}</span><br>Confidence: {scenarios["Blue"]["conf']:.0f}%<br>Status: <b>{c_status}</b><br>Simulated P/L: <span style="color:{pl_color}; font-weight:bold;">{scenarios["Blue"]["impact"]:+,.0f} ฿</span></div>', unsafe_allow_html=True)
+    with sim_col3:
+        c_status = t["confirmed_status"] if scenarios["Tie"]["passed"] else t["wait_status"]
+        pl_color = "#10b981" if scenarios["Tie"]["impact"] >= 0 else "#ef4444"
+        st.markdown(f'<div class="sim-box"><b>{t["if_tie"]}</b><br>Next Favored: <span style="color:{"#ef4444" if scenarios["Tie"]["favored"]=="Red" else "#3b82f6"}">{scenarios["Tie"]["favored"]}</span><br>Confidence: {scenarios["Tie"]["conf']:.0f}%<br>Status: <b>{c_status}</b><br>Simulated P/L: <span style="color:{pl_color}; font-weight:bold;">{scenarios["Tie"]["impact"]:+,.0f} ฿</span></div>', unsafe_allow_html=True)
+
+else:
+    st.info(t["need_more_data"])
