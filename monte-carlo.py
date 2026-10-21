@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="Pro Card Shoe Predictor Dashboard", page_icon="🃏", layout="wide"
 )
 
-# Professional Modern Blue & Sky Blue Gradient Theme Styling
+# Professional Modern Blue & Sky Blue Gradient Theme Styling with Vibrant Colors
 st.markdown(
     """
 <style>
@@ -17,47 +17,52 @@ st.markdown(
         color: #ffffff;
     }
     
-    /* Professional Glassmorphism Metric Cards */
+    /* Professional Glassmorphism Metric Cards with Glowing Borders */
     .metric-card {
-        background: rgba(15, 23, 42, 0.65);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(56, 189, 248, 0.3);
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(56, 189, 248, 0.4);
+        padding: 22px;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         text-align: center;
         margin-bottom: 15px;
+        transition: transform 0.3s ease;
+    }
+    .metric-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(56, 189, 248, 0.8);
     }
     
-    /* Big Betting Recommendation Badges */
+    /* Vibrant Big Betting Recommendation Badges */
     .big-badge {
         font-size: 22px;
         font-weight: bold;
-        padding: 20px;
-        border-radius: 12px;
+        padding: 22px;
+        border-radius: 16px;
         text-align: center;
         margin-top: 15px;
         margin-bottom: 15px;
-        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
     }
-    .red-win { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); color: white; border: 1px solid #f87171; }
-    .blue-win { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; border: 1px solid #60a5fa; }
-    .tie-win { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: 1px solid #34d399; }
-    .wait-signal { background: rgba(30, 41, 59, 0.85); color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.4); }
+    .red-win { background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%); color: white; border: 2px solid #fb7185; }
+    .blue-win { background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%); color: white; border: 2px solid #38bdf8; }
+    .tie-win { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; border: 2px solid #34d399; }
+    .wait-signal { background: rgba(30, 41, 59, 0.9); color: #f1f5f9; border: 2px solid rgba(148, 163, 184, 0.5); }
     
-    /* Roadmap History Dots */
+    /* Roadmap History Dots with Glow */
     .history-dot {
         display: inline-block;
-        width: 38px;
-        height: 38px;
-        line-height: 38px;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
         border-radius: 50%;
         text-align: center;
         font-weight: bold;
         color: white;
-        margin: 4px;
+        margin: 5px;
         font-size: 14px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
     }
     
     /* Sidebar Styling */
@@ -257,10 +262,10 @@ if processed_rounds:
     badges_html = ""
     for r in processed_rounds:
         if r["winner"] == "Red":
-            bg = "#ef4444"
+            bg = "#f43f5e"
             txt = "R"
         elif r["winner"] == "Blue":
-            bg = "#3b82f6"
+            bg = "#0ea5e9"
             txt = "B"
         else:
             bg = "#10b981"
@@ -403,12 +408,12 @@ final_probs = run_multi_algorithm_engine(processed_rounds, game_mode, num_sims)
 m1, m2, m3 = st.columns(3)
 with m1:
     st.markdown(
-        f'<div class="metric-card"><h3>{t["red_prob"]}</h3><h1 style="color: #f87171;">{final_probs["Red"]:.2f}%</h1></div>',
+        f'<div class="metric-card"><h3>{t["red_prob"]}</h3><h1 style="color: #fb7185;">{final_probs["Red"]:.2f}%</h1></div>',
         unsafe_allow_html=True,
     )
 with m2:
     st.markdown(
-        f'<div class="metric-card"><h3>{t["blue_prob"]}</h3><h1 style="color: #60a5fa;">{final_probs["Blue"]:.2f}%</h1></div>',
+        f'<div class="metric-card"><h3>{t["blue_prob"]}</h3><h1 style="color: #38bdf8;">{final_probs["Blue"]:.2f}%</h1></div>',
         unsafe_allow_html=True,
     )
 with m3:
