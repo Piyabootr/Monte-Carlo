@@ -333,9 +333,12 @@ if not st.session_state.confirmed_data.empty:
         total_pl += pl
         
         winner = None
-        if row.get("Red Winner", False): winner = "Red"
-        elif row.get("Blue Winner", False): winner = "Blue"
-        elif row.get("Tie (Draw)", False): winner = "Tie"
+        if row.get("Red Winner", False):
+            winner = "Red"
+        elif row.get("Blue Winner", False):
+            winner = "Blue"
+        elif row.get("Tie (Draw)", False):
+            winner = "Tie"
 
         if winner:
             processed_rounds.append({
@@ -385,10 +388,7 @@ def extract_streaks(rb_seq):
 
 
 def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
-    """
-    คำนวณโหวตและค่าความมั่นใจ (0.50 - 0.99) ของอัลกอริทึมทั้ง 5 ตัว
-    โดยแยกตรรกะอิสระต่อกัน และไม่มีการล็อกค่าคงที่ฝั่งแดงอีกต่อไป
-    """
+    """คำนวณโหวตและค่าความมั่นใจของอัลกอริทึมทั้ง 5 ตัวแบบแยกอิสระ"""
     rb_seq = [r["winner"] for r in rounds_history if r["winner"] in ["Red", "Blue"]]
     n_rb = len(rb_seq)
     if n_rb < 3:
@@ -399,28 +399,22 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
     completed_streaks = [length for _, length in streaks[:-1]]
     max_ceiling = max(completed_streaks) if completed_streaks else curr_len
 
-    # ------------------------------------------------------------------
     # 1. Algo 1: True Shoe Equilibrium & Card Density Monte Carlo
-    # ------------------------------------------------------------------
-    # คำนวณสัดส่วนไพ่ที่ออกไปในขอน (Shoe Depletion) ผสานโมเมนตัมระยะกลาง
     total_r = rb_seq.count("Red")
     total_b = rb_seq.count("Blue")
-    shoe_capacity = 120.0  # สมมติฐานขอนมาตรฐาน
+    shoe_capacity = 120.0
     rem_r = max(10.0, (shoe_capacity / 2.0) - total_r)
     rem_b = max(10.0, (shoe_capacity / 2.0) - total_b)
 
-    # ผสมระหว่างไพ่คงเหลือในขอน กับสัดส่วนความเบี่ยงเบนของขอนจริง
     short_window = rb_seq[-8:]
     sw_r = short_window.count("Red") / len(short_window)
     sw_b = short_window.count("Blue") / len(short_window)
 
-    # ถ้าขอนเอียงชัดเจน ให้ไหลตามขอน แต่ถ้าตึงเกินไปให้ดึงกลับสมดุล
     p_red_mc = 0.35 * (rem_r / (rem_r + rem_b)) + 0.65 * sw_r
     p_blue_mc = 0.35 * (rem_b / (rem_r + rem_b)) + 0.65 * sw_b
     norm_mc = p_red_mc + p_blue_mc
     p_red_mc /= norm_mc
 
-    # ใช้ Deterministic Seed ตามสถานะขอนไพ่ เพื่อให้ผล Monte Carlo นิ่งและแม่นยำ
     rng = random.Random(n_rb * 1009 + total_r * 37 + total_b * 73)
     sim_iters = min(5000, max(1000, num_sims // 10))
     sim_r = sum(1 for _ in range(sim_iters) if rng.random() < p_red_mc)
@@ -432,9 +426,7 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
         vote_mc = "Red" if mc_ratio > 0.5 else "Blue"
         conf_mc = min(0.95, 0.5 + abs(mc_ratio - 0.5) * 1.8)
 
-    # ------------------------------------------------------------------
     # 2. Algo 2: Multi-Order HMM (1-Step, 2-Step, and 3-Step Transitions)
-    # ------------------------------------------------------------------
     r_hmm, b_hmm = 0.0, 0.0
     for order, weight in [(1, 1.0), (2, 2.2), (3, 3.8)]:
         if n_rb > order:
@@ -442,7 +434,7 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
             match_r, match_b = 0.0, 0.0
             for i in range(n_rb - order):
                 if tuple(rb_seq[i:i + order]) == target_state:
-                    recency_boost = 1.0 + (i / n_rb)  # ให้น้ำหนักเหตุการณ์ที่เพิ่งเกิดในขอนมากกว่า
+                    recency_boost = 1.0 + (i / n_rb)
                     if rb_seq[i + order] == "Red":
                         match_r += recency_boost
                     else:
@@ -458,14 +450,10 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
         vote_hmm = "Red" if r_hmm > b_hmm else "Blue"
         conf_hmm = min(0.96, 0.5 + abs(r_hmm - b_hmm) / (r_hmm + b_hmm))
 
-    # ------------------------------------------------------------------
-    # 3. Algo 3: Bayesian Run-Length Survival (ตัวดักไพ่ตัด / ขา L อัจฉริยะ)
-    # ------------------------------------------------------------------
-    # คำนวณว่าเมื่อไพ่ไหลมาถึงความยาว curr_len มีกี่ครั้งที่ไหลต่อ vs กี่ครั้งที่ตัดเปลี่ยนสี!
-    survived_count = 0.5  # Laplace prior
+    # 3. Algo 3: Bayesian Run-Length Survival (ตัวดักไพ่ตัด / ขา L)
+    survived_count = 0.5
     cut_count = 0.5
     for idx_s, (s_col, s_len) in enumerate(streaks[:-1]):
-        # น้ำหนักความสำคัญเพิ่มขึ้นถ้าเป็นสีเดียวกัน
         col_w = 1.5 if s_col == curr_color else 1.0
         if s_len > curr_len:
             survived_count += col_w
@@ -474,27 +462,21 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
 
     prob_continue = survived_count / (survived_count + cut_count)
     if prob_continue >= 0.5:
-        vote_bayes = curr_color  # ไหลต่อ
+        vote_bayes = curr_color
         conf_bayes = min(0.96, prob_continue)
     else:
-        vote_bayes = opp_color   # ดักไพ่ตัด! (แทงสวน)
+        vote_bayes = opp_color
         conf_bayes = min(0.96, 1.0 - prob_continue)
 
-    # ------------------------------------------------------------------
-    # 4. Algo 4: Table Regime & Rhythm Classifier (อ่านจังหวะเค้าไพ่)
-    # ------------------------------------------------------------------
-    # วิเคราะห์รูปทรงขอนไพ่ล่าสุด: ปิงปอง (1-1), ไพ่คู่ (2-2), ขาตัด (L-Cut), หรือมังกร
+    # 4. Algo 4: Table Regime & Rhythm Classifier
     recent_lens = [length for _, length in streaks[-5:-1]]
     if curr_len >= 4:
-        # โหมดมังกร: ตามมังกรจนกว่าจะหลุด
         vote_regime = curr_color
         conf_regime = 0.88
     elif len(recent_lens) >= 2 and all(x == 1 for x in recent_lens[-2:]) and curr_len == 1:
-        # โหมดปิงปอง (1-1-1): สั่งสลับสีทันที!
         vote_regime = opp_color
         conf_regime = 0.86
     elif len(recent_lens) >= 2 and all(x == 2 for x in recent_lens[-2:]):
-        # โหมดไพ่คู่ (2-2): ถ้าเพิ่งมา 1 เม็ดให้ตามเป็นเม็ดที่ 2, ถ้าครบ 2 เม็ดแล้วให้ตัด!
         if curr_len == 1:
             vote_regime = curr_color
             conf_regime = 0.85
@@ -502,11 +484,9 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
             vote_regime = opp_color
             conf_regime = 0.85
     elif completed_streaks and curr_len == max_ceiling and completed_streaks.count(max_ceiling) >= 2:
-        # โหมดเพดานไพ่ตัดแม่นยำ (เช่น ขอนนี้ชน 2 หรือ 3 แล้วตัดตลอด)
         vote_regime = opp_color
         conf_regime = 0.84
     else:
-        # โหมด EMA ระยะสั้น-กลาง
         ema_r, ema_b, dec = 0.0, 0.0, 1.0
         for c in reversed(rb_seq[-10:]):
             if c == "Red":
@@ -517,9 +497,7 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
         vote_regime = "Red" if ema_r >= ema_b else "Blue"
         conf_regime = 0.5 + abs(ema_r - ema_b) / (ema_r + ema_b + 0.001) * 0.4
 
-    # ------------------------------------------------------------------
     # 5. Algo 5: Multi-Scale N-Gram Pattern Engine (3, 4, 5-Gram)
-    # ------------------------------------------------------------------
     pat_r, pat_b = 0.0, 0.0
     for k_gram, k_weight in [(3, 1.5), (4, 3.0), (5, 5.0)]:
         if n_rb > k_gram:
@@ -540,16 +518,14 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
         vote_pattern = "Red" if pat_r >= pat_b else "Blue"
         conf_pattern = min(0.97, 0.5 + abs(pat_r - pat_b) / (pat_r + pat_b))
 
-    # ตรวจสอบกับดักไพ่ตัด (Cut-Point Trap) และ Shannon Entropy
-    at_cut_trap = (completed_streaks and curr_len == max_ceiling and 0.42 <= prob_continue <= 0.58)
+    at_cut_trap = bool(completed_streaks and curr_len == max_ceiling and 0.42 <= prob_continue <= 0.58)
     
-    # คำนวณความไร้ระเบียบของการเปลี่ยนสถานะล่าสุด
     recent_trans = [1 if rb_seq[i] == rb_seq[i - 1] else 0 for i in range(max(1, n_rb - 8), n_rb)]
     p_same = sum(recent_trans) / len(recent_trans) if recent_trans else 0.5
     if 0 < p_same < 1:
         entropy = -(p_same * math.log2(p_same) + (1 - p_same) * math.log2(1 - p_same))
     else:
-        entropy = 0.0  # เสถียรภาพสูงมาก (มังกรล้วน หรือ ปิงปองล้วน)
+        entropy = 0.0
 
     votes = [vote_mc, vote_hmm, vote_bayes, vote_regime, vote_pattern]
     confs = [conf_mc, conf_hmm, conf_bayes, conf_regime, conf_pattern]
@@ -564,27 +540,21 @@ def compute_5_algorithms_single_step(rounds_history, game_mode, num_sims):
 
 
 def run_walk_forward_sniper_analysis(rounds_history, game_mode, num_sims, sniper_mode=True):
-    """
-    ระบบตรวจข้อสอบย้อนหลังในขอนจริง (Walk-Forward Validation):
-    ทดสอบว่าตั้งแต่ตาที่ 5 จนถึงตาล่าสุด อัลกอริทึมแต่ละตัวทายถูกกี่ครั้ง
-    แล้วนำความแม่นยำจริงในขอนนี้มาถ่วงน้ำหนัก + คัดเฉพาะสัญญาณ Sniper ที่แม่นยำสูงสุด
-    """
+    """ระบบตรวจข้อสอบย้อนหลังในขอนจริง (Walk-Forward Validation)"""
     algo_correct = [0, 0, 0, 0, 0]
     algo_total = [0, 0, 0, 0, 0]
 
     sniper_wins = 0
     sniper_losses = 0
 
-    # จำลองย้อนหลังทีละตา (Walk-Forward)
     for t_idx in range(5, len(rounds_history)):
         actual_next = rounds_history[t_idx]["winner"]
         if actual_next == "Tie":
-            continue  # เสมอคืนทุน ไม่นับเสีย
+            continue
 
         sub_hist = rounds_history[:t_idx]
         v_step, c_step, m_step = compute_5_algorithms_single_step(sub_hist, game_mode, num_sims)
 
-        # คำนวณคะแนนถ่วงน้ำหนักด้วยความแม่นสะสมก่อนหน้า
         w_red, w_blue = 0.0, 0.0
         best_algo_idx = 0
         best_algo_acc = -1.0
@@ -607,7 +577,6 @@ def run_walk_forward_sniper_analysis(rounds_history, game_mode, num_sims, sniper
         maj_cnt = max(r_cnt, b_cnt)
         w_ratio = max(w_red, w_blue) / (w_red + w_blue + 1e-9)
 
-        # เงื่อนไข Sniper คัดเน้นๆ
         leader_agrees = (v_step[best_algo_idx] == maj_side)
         bayes_cut_agree = (v_step[2] == maj_side or c_step[2] < 0.65)
         low_trap = not m_step["at_cut_trap"]
@@ -623,13 +592,11 @@ def run_walk_forward_sniper_analysis(rounds_history, game_mode, num_sims, sniper
             else:
                 sniper_losses += 1
 
-        # อัปเดตคะแนนความแม่นรายตัวหลังรู้ผลจริง
         for a_i in range(5):
             algo_total[a_i] += 1
             if v_step[a_i] == actual_next:
                 algo_correct[a_i] += 1
 
-    # คำนวณสำหรับตาถัดไป (Next Round Prediction)
     curr_votes, curr_confs, curr_meta = compute_5_algorithms_single_step(rounds_history, game_mode, num_sims)
 
     algo_accuracies = []
@@ -641,7 +608,7 @@ def run_walk_forward_sniper_analysis(rounds_history, game_mode, num_sims, sniper
     for a_i in range(5):
         if algo_total[a_i] > 0:
             acc_pct = (algo_correct[a_i] / algo_total[a_i]) * 100.0
-             bayesian_acc = (algo_correct[a_i] + 2.0) / (algo_total[a_i] + 4.0)
+            bayesian_acc = (algo_correct[a_i] + 2.0) / (algo_total[a_i] + 4.0)
         else:
             acc_pct = 75.0
             bayesian_acc = 0.75
